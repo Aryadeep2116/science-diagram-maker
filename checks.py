@@ -226,3 +226,111 @@ def in_viewbox(svg_text):
                        f"{min_x:g} {min_y:g} {width:g} {height:g}: {shown}{extra}.")
     return True, "Everything is inside the viewBox."
 
+
+
+# ---------- Check 5 (my own): custom_checks = concept keywords + safety ----------
+# Spelling alternatives so a correct diagram is not rejected unfairly.
+# Careful: 'o2' is NOT allowed as oxygen because it would match inside 'co2'.
+SYNONYMS = {
+    "centre": ["centre", "center"],
+    "carbon dioxide": ["carbon dioxide", "co2", "co\u2082"],
+}
+
+
+def concept_keywords(svg_text, concept):
+    """Pass if every required keyword for this concept appears in the <text> labels."""
+    root = parse_svg(svg_text)
+    pieces = []
+    for element in root.iter():
+        if local_name(element.tag) == "text":
+            pieces.append("".join(element.itertext()))
+    all_text = " ".join(pieces).lower()            # lowercase so matching ignores capitals
+
+    missing = []
+    for keyword in concept["keywords"]:
+        options = SYNONYMS.get(keyword, [keyword])
+        found = False
+        for option in options:
+            if option in all_text:
+                found = True
+        if not found:
+            missing.append(keyword)
+
+    if missing:
+        return False, "The labels never mention: " + ", ".join(missing) + "."
+    return True, "All required keywords are present."
+
+
+FORBIDDEN_TAGS = ("script", "foreignObject", "iframe", "object", "embed")
+
+
+def safe_svg(svg_text):
+    """Pass if the SVG has nothing that could run code or load outside content."""
+    root = parse_svg(svg_text)
+    problems = []
+    for element in root.iter():
+        name = local_name(element.tag)
+        if name in FORBIDDEN_TAGS:
+            problems.append(f"forbidden <{name}> element")
+        for attribute, value in element.attrib.items():
+            attr = local_name(attribute).lower()
+            if attr.startswith("on"):              # onclick, onload, onbegin ... = event handlers
+                problems.append(f"event attribute '{attr}' on <{name}>")
+            if attr == "href" and not value.strip().startswith("#"):   # only '#id' links are allowed
+                problems.append(f"external link in href on <{name}>")
+        if name == "style":
+            css = (element.text or "").lower()
+            if "@import" in css or "http" in css:
+                problems.append("external resource in <style>")
+    if problems:
+        return False, "Unsafe content: " + "; ".join(problems[:5]) + "."
+    return True, "No scripts, event handlers or external links."
+
+
+def custom_checks(svg_text, concept):
+    """My 5th check: groups the keyword check and the safety check into one."""
+    keywords_ok, keywords_reason = concept_keywords(svg_text, concept)
+    safe_ok, safe_reason = safe_svg(svg_text)
+
+    reasons = []
+    if not keywords_ok:
+        reasons.append(keywords_reason)
+    if not safe_ok:
+        reasons.append(safe_reason)
+    if reasons:
+        return False, " ".join(reasons)
+    return True, "Keywords present and SVG is safe."
+
+
+# ---------- Run everything ----------
+def _pack(result):
+    """Turn a (passed, reason) tuple into a dict that can be saved as JSON."""
+    return {"passed": result[0], "reason": result[1]}
+
+
+def run_all_checks(svg_text, concept):
+    """Run all 5 checks. Returns {check_name: {"passed": bool, "reason": str}}."""
+    results = {}
+    results["valid_xml"] = _pack(valid_xml(svg_text))
+
+    if not results["valid_xml"]["passed"]:
+        # The other checks need a parsed SVG, so mark them as skipped failures.
+        for name in ("in_viewbox", "title_and_labels", "has_animation", "custom_checks"):
+            results[name] = {"passed": False, "reason": "Skipped because the SVG could not be parsed."}
+        return results
+
+    results["in_viewbox"] = _pack(in_viewbox(svg_text))
+    results["title_and_labels"] = _pack(title_and_labels(svg_text))
+    results["has_animation"] = _pack(has_animation(svg_text))
+    results["custom_checks"] = _pack(custom_checks(svg_text, concept))
+    return results
+
+
+def failed_checks(results):
+    """List of (check_name, reason) for checks that really failed (skipped ones are not listed)."""
+    failures = []
+    for name, outcome in results.items():
+        if not outcome["passed"] and not outcome["reason"].startswith("Skipped"):
+            failures.append((name, outcome["reason"]))
+    return failures
+
