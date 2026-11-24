@@ -19,11 +19,11 @@ class TestDefaultMotion(unittest.TestCase):
         cls.results = {r['id']: r for r in load_results()}
         cls.roots = {i: ET.fromstring(r['svg']) for i, r in cls.results.items()}
 
-    def test_motion_does_not_claim_unverified_bounds_as_pass(self):
+    def test_builtin_motion_bounds_are_verified(self):
         for result in self.results.values():
             self.assertTrue(result['checks']['in_viewbox']['passed'])
-            self.assertIsNone(result['checks']['animated_bounds']['passed'])
-            self.assertEqual(result['final_status'], 'needs_review')
+            self.assertTrue(result['checks']['animated_bounds']['passed'])
+            self.assertEqual(result['final_status'], 'pass')
             self.assertEqual(result['scientific_verification']['status'], 'pass')
 
     def test_each_example_has_real_looping_motion(self):

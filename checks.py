@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET          # Python's built-in XML parser
 import config                               # for MIN_TEXT_LABELS
 from svg_utils import parse_viewbox, to_float   # used in Step 8
 from render_bounds import rendered_bounds
+from motion_bounds import bounded_motion
 
 
 def local_name(tag):
@@ -408,6 +409,8 @@ def run_all_checks(svg_text, concept):
         for e in root.iter())
     if not has_dynamic_content:
         results["animated_bounds"] = {"passed": True, "reason": "No animated movement to check."}
+    elif results["in_viewbox"]["passed"] is True and safe_svg(svg_text)[0] and bounded_motion(root):
+        results["animated_bounds"] = {"passed": True, "reason": "All supported moving circles and rotating groups remain inside the viewBox for their complete paths; browser playback and scientific accuracy still need review."}
     elif results["in_viewbox"]["passed"] is True and opacity_only_animation(root):
         results["animated_bounds"] = {"passed": True, "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."}
     else:
