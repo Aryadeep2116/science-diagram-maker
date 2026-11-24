@@ -5,7 +5,7 @@ import os
 import threading
 import time
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 
 import config
 from concepts import get_concept
@@ -14,6 +14,7 @@ from pipeline import generate_one
 from verification import assess_result
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 1_500_000
 
 generate_lock = threading.Lock()   # only ONE live generation at a time (stops double-clicks)
 COOLDOWN_SECONDS = 5               # minimum gap between live generations
@@ -39,6 +40,33 @@ def index():
 @app.route("/api/results")
 def api_results():
     return jsonify(load_results())
+
+
+@app.route("/api/status")
+def api_status():
+    """Non-secret configuration and local worker state; does not call Gemini."""
+    wait = max(0, int(COOLDOWN_SECONDS - (time.time() - last_finished) + 0.999))
+    return jsonify(key_configured=bool(config.GEMINI_API_KEY),
+                   primary_model=config.GEMINI_MODEL,
+                   fallback_model=(config.GEMINI_FALLBACK_MODEL if config.GEMINI_FALLBACK_MODEL and config.GEMINI_FALLBACK_MODEL != config.GEMINI_MODEL else None),
+                   busy=generate_lock.locked(), cooldown_seconds=wait,
+                   provider_status="not_checked")
+
+
+@app.route("/api/check/<int:concept_id>", methods=["POST"])
+def recheck(concept_id):
+    """Revalidate a browser-saved live SVG without trusting a submitted verdict."""
+    concept = get_concept(concept_id)
+    if concept is None:
+        return jsonify(error="Unknown concept."), 404
+    data = request.get_json(silent=True)
+    if not isinstance(data, dict) or not isinstance(data.get("svg"), str):
+        return jsonify(error="Expected an SVG string."), 400
+    if len(data["svg"].encode("utf-8")) > 1_000_000:
+        return jsonify(error="SVG is too large to recheck."), 413
+    result = assess_result({"svg": data["svg"]}, concept)
+    return jsonify(checks=result["checks"], final_status=result["final_status"],
+                   scientific_verification=result["scientific_verification"])
 
 
 @app.route("/api/generate/<int:concept_id>", methods=["POST"])

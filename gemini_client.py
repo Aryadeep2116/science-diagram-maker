@@ -24,6 +24,10 @@ class GeminiRateLimitError(GeminiError):
     """Rate-limited after retries, or retry delay exceeds the interactive limit."""
 
 
+class GeminiModelNotFoundError(GeminiError):
+    """The configured model is not available to this project."""
+
+
 class GeminiOverloadedError(GeminiError):
     """The upstream service is temporarily unavailable."""
 
@@ -90,7 +94,7 @@ def _temporary_error(status, retry_delay=None):
     return error_type(message)
 
 
-def _post_once(prompt):
+def _post_once(prompt, model=None):
     """Send ONE HTTP request to Gemini. Returns the raw response object."""
     body = {
         "contents": [{"parts": [{"text": prompt}]}],
@@ -102,7 +106,9 @@ def _post_once(prompt):
     }
     try:
         return requests.post(
-            config.GEMINI_URL, headers=headers, json=body,
+            (config.GEMINI_URL if model is None else
+             "https://generativelanguage.googleapis.com/v1beta/models/" + model + ":generateContent"),
+            headers=headers, json=body,
             timeout=config.REQUEST_TIMEOUT_SECONDS,
         )
     except requests.exceptions.Timeout:
@@ -135,7 +141,7 @@ def _parse_response(response):
     }
 
 
-def call_gemini(prompt):
+def _call_model(prompt, model=None):
     """Call Gemini with retries on 429/503.
 
     Returns a dict: text, input_tokens, output_tokens, api_retries.
@@ -147,7 +153,7 @@ def call_gemini(prompt):
 
     api_retries = 0
     while True:
-        response = _post_once(prompt)
+        response = _post_once(prompt) if model is None else _post_once(prompt, model)
 
         if response.status_code == 200:                 # success
             result = _parse_response(response)
@@ -157,10 +163,14 @@ def call_gemini(prompt):
         if response.status_code in config.API_RETRY_STATUS_CODES:
             delay = _wait_time(response, api_retries)
             if api_retries >= config.MAX_API_RETRIES:
-                raise _temporary_error(response.status_code, _retry_delay(response))
+                error = _temporary_error(response.status_code, _retry_delay(response))
+                error.api_retries = api_retries
+                raise error
             if delay > config.MAX_AUTOMATIC_RETRY_WAIT_SECONDS:
                 # Never retry before the provider's requested reset time.
-                raise _temporary_error(response.status_code, delay)
+                error = _temporary_error(response.status_code, delay)
+                error.api_retries = api_retries
+                raise error
             time.sleep(delay)
             api_retries += 1
             continue
@@ -172,8 +182,31 @@ def call_gemini(prompt):
                 raise GeminiError("Gemini denied access (HTTP 403). Check the project's API access and model permissions.")
             raise GeminiError("Gemini rejected the request (HTTP 400). Check the model and request configuration.")
         if response.status_code == 404:
-            raise GeminiError(f"Model '{config.GEMINI_MODEL}' was not found. Check GEMINI_MODEL.")
+            error = GeminiModelNotFoundError(f"Model '{model or config.GEMINI_MODEL}' was not found. Check the model configuration.")
+            error.api_retries = api_retries
+            raise error
         raise GeminiError(f"The AI service returned an unexpected error (HTTP {response.status_code}).")
+
+
+def call_gemini(prompt):
+    """Try the primary model, then an explicitly configured fallback for quota/availability errors."""
+    try:
+        result = _call_model(prompt)
+        result["model"] = config.GEMINI_MODEL
+        return result
+    except (GeminiRateLimitError, GeminiOverloadedError, GeminiModelNotFoundError) as primary:
+        fallback = config.GEMINI_FALLBACK_MODEL
+        if not fallback or fallback == config.GEMINI_MODEL:
+            raise
+        try:
+            result = _call_model(prompt, fallback)
+        except GeminiError as error:
+            # Preserve the actionable fallback error without exposing provider response text.
+            raise type(error)(f"Primary model unavailable; fallback model also failed: {error}") from error
+        result["api_retries"] += getattr(primary, "api_retries", 0)
+        result["model"] = fallback
+        result["fallback_from"] = config.GEMINI_MODEL
+        return result
 
 
 if __name__ == "__main__":

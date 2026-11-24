@@ -1,75 +1,57 @@
 # Science Diagram Maker
 
-Asks Gemini for 5 animated SVG science diagrams, checks each in code, and lets a reviewer approve or reject them.
-Live app: <https://science-diagram-maker-ahg7.onrender.com>
+Science Diagram Maker asks Gemini for animated SVG science diagrams, runs automatic checks, and lets a person record a scientific review. The saved examples can be viewed without a Gemini key. Live app: <https://science-diagram-maker-ahg7.onrender.com>
 
 ## Run locally
-1. `python -m venv venv` then `venv\Scripts\activate` (Windows) or `source venv/bin/activate`
-2. `pip install -r requirements.txt`
-3. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`)
-4. `python generate_all.py` regenerates `results.json` (`python generate_all.py 3` for one concept)
-5. `python app.py` then open http://127.0.0.1:5000
-6. `python -m unittest -v` runs the check tests (no API needed)
 
+1. Create and activate a virtual environment: `python -m venv .venv`, then `source .venv/bin/activate` (macOS/Linux) or `.venv\Scripts\activate` (Windows).
+2. Install dependencies: `pip install -r requirements.txt`.
+3. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` for generation. Never commit or share the key.
+4. Run `python app.py` and open <http://127.0.0.1:5000>. You can inspect the existing diagrams without a key.
+5. Optionally run `python generate_all.py` to replace `results.json`, or `python generate_all.py 3` for one concept. These commands make real API calls and may incur charges.
+6. Run tests without an API key: `python -m unittest -v` and `node --test tests/test_issues.js tests/test_review.js`.
 
-Model: gemini-3.5-flash-lite. Costs are estimates from editable prices in `config.py`; actual cost depends on your plan and usage.
-Concepts 2 to 5 were generated with the first prompt; concept 1 was regenerated after I tightened the prompt.
+## Generation and configuration
 
-## How it works
-Prompt builder, then Gemini call (429/503: retry up to 3 times, using the provider’s retry delay or 2s, 4s, 8s backoff), then 5 checks, then one retry that tells the model exactly which checks failed. Tokens and cost are summed across attempts. API retries and validation retries are counted separately.
-Checks: valid XML; basic viewBox bounds; title and 3+ text labels; at least one animation; required science keywords and a safety check. These checks do **not** verify scientific correctness or circuit connectivity. The viewBox result is **UNVERIFIED** when text extent, CSS, references or animation require renderer review. A diagram with an unverified check or without scientific verification for the exact SVG is marked **NEEDS REVIEW**, not PASS. Any automatic or scientific failure gives FAIL. The saved series circuit is marked FAIL: its right-hand wire has a gap, and its component symbols do not show clear connections. Changing the SVG invalidates a recorded scientific verdict. Browser Approve/Reject decisions are separate from the recorded scientific verification and are tied to the exact diagram.
+Set environment variables locally in `.env`, or in the hosting service's environment settings and restart/redeploy the service:
 
-## Troubleshooting live generation
+- `GEMINI_API_KEY`: server-side key. The browser never needs it. A configured key does not guarantee that the key works, the model is accessible, or quota is available.
+- `GEMINI_MODEL`: primary model (default `gemini-3.5-flash-lite`). Choose a model actually available to your project; the default is not a guarantee of availability.
+- `GEMINI_FALLBACK_MODEL`: optional, different model available to the same project. After a 429, 503 or 404 from the primary, the server tries this model. It does not fall back for invalid keys or permission/request errors. Both models may share a quota, so fallback is not a cure for free-tier limits.
+- `GEMINI_FALLBACK_INPUT_PRICE` and `GEMINI_FALLBACK_OUTPUT_PRICE`: optional estimated USD per million tokens for the fallback. Both are needed for a fallback cost estimate. The editable primary price estimates are in `config.py`; update them for the selected model. Costs are estimates, not billing records; unknown fallback prices yield an unavailable estimate.
 
-- Live generation runs on the server and needs `GEMINI_API_KEY` in its environment. On Render, set it in the service’s Environment settings and redeploy/restart the service; do not paste the key into the page, repository, logs or chat. Optionally set `GEMINI_MODEL` to a model available to that project.
-- A 429 means Gemini rate limiting or quota exhaustion. The app respects `Retry-After` or Gemini `RetryInfo`; if the suggested wait exceeds 20 seconds, it reports the delay instead of retrying too early. Check the project’s Gemini quota and try again after the reset. A new key in the same project may still share the same quota.
-- A 503 is a temporary upstream availability issue, a 403 may indicate project/model access, and a 400 may be a request/model configuration issue; these are not automatically treated as invalid keys.
-- The button shows progress and errors beside the affected diagram. The original saved diagram remains visible after an error. A live result is only kept in the current page and is not written to `results.json`.
+The status panel reports local configuration and worker state, **not** a provider health check. A live attempt is the only way this app tests the key, access and quota. A 429 means rate limiting or quota exhaustion; the app honors Gemini's retry delay or uses 2/4/8-second backoff, up to three retries. It reports delays over 20 seconds rather than waiting automatically. A 503 indicates temporary upstream unavailability; 403 can mean access restrictions; 400 can indicate a request or model configuration problem. See the per-diagram message and Current issues panel for errors. A different key in the same project may share the same quota.
 
-## Saved results
+## Checks and review
+
+Each concept has specific scientific guidance in its prompt. The pipeline extracts SVG from the response, checks it and, if a check fails, makes one validation retry with the failure reasons and practical correction advice. API retries and validation retries are separate. Successful attempts track the actual model and token-based cost estimates; if a later API attempt fails, its retry count may not be included in the saved result.
+
+Automatic checks cover XML/root, static viewBox bounds, title and visible labels, structural animation, concept keywords and SVG safety. They are **not** a scientific correctness test, a circuit connectivity test, or proof that the layout works everywhere.
+
+- The static viewBox check uses shape geometry and a padded `resvg-py` raster with the bundled DejaVu Sans font to detect visible overflow, including text. It no longer marks every text-bearing diagram unverified simply because it contains text. This is a bounded static snapshot, not a proof for all off-screen content or all browser fonts; unsupported/relative geometry, unsafe external resources or renderer failures remain unverified when they cannot be checked reliably. Animated motion is considered separately.
+- Animated bounds remain **UNVERIFIED**: the browser samples selected animation times and reports possible overflow as advisory information. Sampling can miss frames and effects or overestimate bounds; inspect playback manually. Structural animation detection does not prove correct playback, and overlap is not automatically verified.
+- A reviewer must explicitly choose **Verify & approve** or **Verify & reject** after checking the science. The browser records the decision, optional note and time for that exact SVG. A changed SVG needs a new review. A scientific approval never overrides a failed or unverified automatic check: a failure yields FAIL, and otherwise any uncertainty yields NEEDS REVIEW. Only all passing automatic checks plus a scientific pass yield PASS. Rejection yields FAIL.
+
+### Saved examples
+
+The following scientific assessments apply only to the exact SVGs currently in `results.json`. Reviews used SVG source and static renders and inspected animation paths, not playback in every browser. Overall outcomes also account for automatic checks; animated bounds remain unverified.
 
 | Concept | Overall | Scientific review | Estimated USD | Validation / API retries |
 | --- | --- | --- | ---: | ---: |
-| Pythagoras’ theorem | FAIL | Fail | $0.000973 | 0 / 0 |
+| Pythagoras’ theorem | FAIL | Fail: area labels use units instead of square units; an animated label overlaps; title typo | $0.000973 | 0 / 0 |
 | Parts of a circle | NEEDS REVIEW | Pass | $0.000741 | 0 / 0 |
-| Series circuit | FAIL | Fail | $0.001627 | 1 / 1 |
-| Photosynthesis | NEEDS REVIEW | Pass | $0.001860 | 0 / 0 |
-| States of matter | FAIL | Fail | $0.001802 | 0 / 2 |
+| Series circuit | FAIL | Fail: right-hand wire gap and unclear component connections | $0.001627 | 1 / 1 |
+| Photosynthesis | NEEDS REVIEW | Pass at concept level; simplified word equation | $0.001860 | 0 / 0 |
+| States of matter | FAIL | Fail: liquid particles are widely separated | $0.001802 | 0 / 2 |
 
-The overall outcomes are not the same as scientific review: all five saved SVGs also need renderer-based bounds review. Costs and retry counts reflect the saved runs; `results.json` is the source of truth if diagrams are regenerated.
+`results.json` is the source for the saved examples and may change if the batch command is run. Browser reviews can differ from those saved assessments; they are human assertions, not independent automated verification.
 
-## Decisions
-- **Persistence:** browser localStorage, keyed by concept id. Simplest to explain and works on Render's free tier, whose disk is wiped on redeploy. Trade-off: decisions are per browser and not shared. With more time I'd use a database such as Postgres or SQLite on a persistent disk.
-- **Safety:** the API key is only an environment variable, and Gemini is only called from the server. SVGs are shown inside `<img>` data URIs, so scripts cannot run.
-- Generate results are shown in the browser only; they never overwrite `results.json`.
+## Persistence and deployment
 
-## What failed and how I fixed it
-- Gemini wraps SVG in markdown fences (```xml). Fixed with `extract_svg`.
-- Rate limits: the saved series circuit and states-of-matter results report 1 and 2 API retries respectively. A retry count alone does not identify the HTTP status.
-- Concept 1 first run FAILED `in_viewbox` even after its retry (5,598 output tokens, estimated $0.002313). A fresh run passed.
-- Concept 1 then passed all checks but looked wrong: clipped squares, covered title, overlapping labels. Cause: the original viewBox check skipped transformed elements. The check now handles basic static transformed shapes and the prompt reserves a title band. This is why Approve/Reject matters: code cannot judge layout.
-- Known limitations: no browser-based text-width, overlap, CSS, reference or animated-bounds verification. The bounds result is unverified rather than passed when these need a renderer. Animation and visibility checks are structural and cannot prove browser playback or resolve all CSS.
+Live-generated results and explicit review decisions are stored in the current browser's localStorage, not on the server, and are not shared between users or browsers. They can be cleared by the browser or unavailable due to storage settings. On refresh, live SVGs are rechecked by the server rather than trusting cached automatic results; if rechecking fails they remain unverified. Use **Restore saved diagram** to return to the server's `results.json` version. Live generation does not write that file. Browser-local reviews should not be treated as an authenticated audit trail; use a database and reviewer accounts for shared, durable, attributable records.
 
-## One more day
-- Add renderer-based verification for text extents, overlapping labels, CSS and animation over time.
-- Render the SVG to an image and ask a vision model to judge it.
-- Store review decisions in a database, add reviewer login.
-- Save live generations, cache results, add more tests (pipeline with a mocked API).
+The API key stays on the server, and diagram previews use SVG in an image rather than executing it as page markup. The advisory animation sampler uses a script-disabled iframe with a restrictive resource policy. Nevertheless, this application is a demo, not a hardened multi-user service: public generation and recheck endpoints have no authentication or per-user rate limits and can consume resources or API quota. Add access controls, request/rate limits and appropriate isolation before exposing it to untrusted users. The generation lock and cooldown are process-local; the supplied `Procfile` uses one Gunicorn worker, but they do not coordinate across multiple instances. A Render deployment must be updated separately to pick up code and environment changes.
 
 ## AI tools used
-Claude: guided troubleshooting and repetitive code writing.
-Arena AI : For checking the edge cases
 
-## Current issues
-The Current issues panel lists failed automatic checks, recorded scientific-review failures, and live-generation errors for each diagram. It updates after generation, links to the relevant row, and distinguishes diagrams awaiting verification from failures. Live-generation errors remain visible until another attempt for that diagram; they are not persisted.
-
-## Scientific review of the saved diagrams
-These verdicts apply only to the exact SVGs in `results.json`; a changed or newly generated SVG requires a new review. Review used SVG source and static renders, and inspected animation paths in source; it did not verify playback in every browser.
-
-- **Pythagoras — FAIL:** the geometry is correct, but area labels use “units” instead of square units, an animated label overlaps the side label, and the accessible title has a typo.
-- **Circle — PASS:** centre, radius, diameter and circumference are correctly depicted and described.
-- **Series circuit — FAIL:** the right-hand wire has a gap and component connections are unclear.
-- **Photosynthesis — PASS:** the inputs, light energy and products are represented correctly at the level of the concept; the word equation is simplified.
-- **States of matter — FAIL:** liquid particles are drawn widely separated, contradicting the close spacing described in the concept.
-
-These are reviews of the saved examples, not an automated scientific validator. Local browser Approve/Reject decisions remain separate from these recorded verdicts.
+Claude: guided troubleshooting and repetitive code writing. Arena AI: checking edge cases.

@@ -33,6 +33,12 @@
       <div class="overview-stats" id="stats" aria-live="polite"></div>
     </section>
 
+    <section class="connection-panel" aria-labelledby="connection-heading">
+      <div><div class="section-kicker">LIVE GENERATION</div><h2 id="connection-heading">Generation status</h2>
+        <p>Server configuration only; Gemini availability and quota are checked when you generate.</p></div>
+      <div id="connection-status" role="status" aria-live="polite">Checking server configuration…</div>
+      <button type="button" id="refresh-status">Refresh status</button>
+    </section>
     <div id="message" class="message" role="alert" hidden></div>
     <section class="issues-panel" aria-labelledby="issues-heading">
       <div class="issues-heading"><span class="issue-icon" aria-hidden="true">!</span><div><div class="section-kicker">REVIEW QUEUE</div><h2 id="issues-heading">Current issues</h2></div></div>
@@ -52,6 +58,8 @@
   <!-- tojson makes the data safe inside a script tag -->
   <script id="data" type="application/json">{{ results|tojson }}</script>
   <script src="{{ url_for('static', filename='issues.js') }}"></script>
+  <script src="{{ url_for('static', filename='review.js') }}"></script>
+  <script src="{{ url_for('static', filename='animated-bounds.js') }}"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

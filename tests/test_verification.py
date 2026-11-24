@@ -16,7 +16,8 @@ class TestVerification(unittest.TestCase):
         self.assertEqual(result['scientific_verification']['status'], 'fail')
         self.assertIn('gap', result['scientific_verification']['reason'])
         self.assertTrue(all(c['passed'] is not False for c in result['checks'].values()))
-        self.assertIsNone(result['checks']['in_viewbox']['passed'])
+        self.assertTrue(result['checks']['in_viewbox']['passed'])
+        self.assertIsNone(result['checks']['animated_bounds']['passed'])
 
     def test_passed_automatic_checks_need_scientific_review(self):
         result = assess_result({'svg': GOOD_SVG, 'final_status': 'pass'}, PYTHAGORAS)

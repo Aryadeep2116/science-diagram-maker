@@ -42,7 +42,8 @@ class TestSvgEdgeCases(unittest.TestCase):
 
     def test_unverified_is_not_a_failed_check(self):
         result = checks.run_all_checks(GOOD_SVG, get_concept(1))
-        self.assertIsNone(result['in_viewbox']['passed'])
+        self.assertTrue(result['in_viewbox']['passed'])
+        self.assertIsNone(result['animated_bounds']['passed'])
         self.assertEqual(checks.failed_checks(result), [])
 
 

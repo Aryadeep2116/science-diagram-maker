@@ -36,6 +36,8 @@ STRICT RULES:
 13. Never use HTML entities such as &nbsp; &sup2; &times;. Type the characters directly
     (², ×) or use numeric references. Only &amp; &lt; &gt; are allowed.
 """
+    if concept.get("review_hint"):
+        prompt += "\nSCIENTIFIC ACCURACY REQUIREMENTS:\n" + concept["review_hint"] + "\n"
     hint = concept.get("layout_hint")
     if hint:
         prompt += "\nFIXED LAYOUT (copy these coordinates exactly):\n" + hint + "\n"
@@ -55,5 +57,7 @@ def build_retry_prompt(concept, failures):
         base
         + "\nYOUR PREVIOUS ATTEMPT WAS REJECTED by automatic checks. Problems found:\n"
         + problems
-        + "\n\nFix ALL of these problems and return the complete corrected SVG only."
+        + "\n\nFix ALL of these problems without weakening the scientific content. "
+          "Pay particular attention to: " + concept.get("review_hint", "clear, accurate labels and geometry")
+        + "\nReturn the complete corrected SVG only."
     )

@@ -8,6 +8,7 @@ from svgelements import Matrix, Point, Rect, Circle, Ellipse, SimpleLine, Polygo
 import xml.etree.ElementTree as ET          # Python's built-in XML parser
 import config                               # for MIN_TEXT_LABELS
 from svg_utils import parse_viewbox, to_float   # used in Step 8
+from render_bounds import rendered_bounds
 
 
 def local_name(tag):
@@ -325,25 +326,49 @@ def _bounds_need_rendering(root):
     return False
 
 
+def _renderer_needs_browser(root):
+    """Relative geometry depends on the original viewport, which padding changes."""
+    numeric = {"x", "y", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "width", "height", "stroke-width"}
+    relative_css = re.compile(
+        r"(?:^|[;{])\s*(?:x|y|cx|cy|r|rx|ry|width|height|stroke-width|font-size|transform|transform-origin)"
+        r"\s*:\s*[^;}]*?(?:%|(?:vw|vh|vmin|vmax)\b|var\s*\()", re.I)
+    for element in root.iter():
+        if local_name(element.tag) in GEOMETRY or local_name(element.tag) == "text":
+            if any(local_name(key) in numeric and to_float(value) is None for key, value in element.attrib.items()):
+                return True
+        css = element.get("style", "")
+        if local_name(element.tag) == "style":
+            css += " ".join(element.itertext())
+        if relative_css.search(re.sub(r"/\*.*?\*/", "", css, flags=re.S)):
+            return True
+    return False
+
 def run_all_checks(svg_text, concept):
-    """Run all 5 checks. Returns {check_name: {"passed": bool, "reason": str}}."""
+    """Run the automatic checks. Returns {check_name: {"passed": bool, "reason": str}}."""
     results = {}
     results["valid_xml"] = _pack(valid_xml(svg_text))
 
     if not results["valid_xml"]["passed"]:
         # The other checks need a parsed SVG, so mark them as skipped failures.
-        for name in ("in_viewbox", "title_and_labels", "has_animation", "custom_checks"):
+        for name in ("in_viewbox", "animated_bounds", "title_and_labels", "has_animation", "custom_checks"):
             results[name] = {"passed": False, "reason": "Skipped because the SVG could not be parsed."}
         return results
 
     results["in_viewbox"] = _pack(in_viewbox(svg_text))
-    if results["in_viewbox"]["passed"]:
-        # Geometry that needs a renderer cannot honestly be certified by a static parser.
-        root = parse_svg(svg_text)
-        if _bounds_need_rendering(root):
-            results["in_viewbox"] = {"passed": None, "reason": (
-                "Supported static geometry is inside the viewBox, but some content or units, including text, "
-                "CSS, references or animation, require rendering review before bounds can be verified.")}
+    root = parse_svg(svg_text)
+    if results["in_viewbox"]["passed"] and _bounds_need_rendering(root):
+        # Rasterise only safe SVGs. A static raster cannot certify moving content.
+        if _renderer_needs_browser(root):
+            results["in_viewbox"] = {"passed": None, "reason": "Viewport-relative geometry needs browser-based review."}
+        elif safe_svg(svg_text)[0]:
+            passed, reason = rendered_bounds(svg_text)
+            results["in_viewbox"] = {"passed": passed, "reason": reason}
+        else:
+            results["in_viewbox"] = {"passed": None, "reason": "Static rendering skipped for unsafe SVG."}
+    has_dynamic_content = any(local_name(e.tag) in ANIMATION_TAGS for e in root.iter()) or any(
+        "@keyframes" in "".join(e.itertext()).lower() for e in root.iter() if local_name(e.tag) == "style")
+    results["animated_bounds"] = ({"passed": None, "reason": "Animation movement and animated visibility need browser playback review; the renderer checks a static snapshot only."}
+                                  if has_dynamic_content else {"passed": True, "reason": "No animated movement to check."})
     results["title_and_labels"] = _pack(title_and_labels(svg_text))
     results["has_animation"] = _pack(has_animation(svg_text))
     results["custom_checks"] = _pack(custom_checks(svg_text, concept))
