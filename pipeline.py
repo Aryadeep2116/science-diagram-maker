@@ -84,7 +84,7 @@ def generate_one(concept):
             break
 
         validation_retries += 1                      # build a retry prompt that names the failures
-        prompt = build_retry_prompt(concept, failures)
+        prompt = build_retry_prompt(concept, failures, previous_svg=svg)
 
     result = {
         "id": concept["id"],

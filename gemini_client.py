@@ -88,6 +88,9 @@ def _temporary_error(status, retry_delay=None):
         error_type = GeminiRateLimitError
     else:
         message = "Gemini is temporarily unavailable (HTTP 503). Try again later."
+        if not config.GEMINI_FALLBACK_MODEL or config.GEMINI_FALLBACK_MODEL == config.GEMINI_MODEL:
+            message += " If this persists, configure an accessible GEMINI_FALLBACK_MODEL on the server."
+        message += " The saved diagram remains available."
         error_type = GeminiOverloadedError
     if retry_delay is not None and retry_delay > 0:
         message += f" Suggested wait: at least {retry_delay} seconds."

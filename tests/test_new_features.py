@@ -35,6 +35,31 @@ class TestRenderer(unittest.TestCase):
         svg = GOOD_SVG.replace('</svg>', '<style>circle { cx: 90%; }</style></svg>')
         self.assertIsNone(run_all_checks(svg, get_concept(1))['in_viewbox']['passed'])
 
+    def test_opacity_only_animation_can_pass_bounds(self):
+        from checks import run_all_checks
+        svg = GOOD_SVG.replace('attributeName="r" values="8;14;8"',
+                               'attributeName="opacity" values="1;0.35;1"')
+        self.assertTrue(run_all_checks(svg, get_concept(1))['animated_bounds']['passed'])
+
+    def test_unsupported_animation_never_gets_opacity_proof(self):
+        from checks import run_all_checks
+        svg = GOOD_SVG.replace('attributeName="r" values="8;14;8"',
+                               'attributeName="opacity" values="1;0.35;1"')
+        for altered in (svg.replace('<circle cx=', '<circle opacity="0" cx='),
+                        svg.replace('dur="2s"', 'additive="sum" dur="2s"'),
+                        svg.replace('<title>', '<style>circle { opacity: 0 }</style><title>'),
+                        svg.replace('values="1;0.35;1"', 'values="1;2;1"'),
+                        svg.replace('dur="2s"', 'href="#other" dur="2s"')):
+            self.assertIsNone(run_all_checks(altered, get_concept(1))['animated_bounds']['passed'])
+
+    def test_opacity_proof_requires_successful_static_bounds(self):
+        from checks import run_all_checks
+        svg = GOOD_SVG.replace('attributeName="r" values="8;14;8"',
+                               'attributeName="opacity" values="1;0.35;1"').replace('cx="100"', 'cx="2000"')
+        checks = run_all_checks(svg, get_concept(1))
+        self.assertFalse(checks['in_viewbox']['passed'])
+        self.assertIsNone(checks['animated_bounds']['passed'])
+
     def test_external_resources_not_loaded_by_renderer(self):
         svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><image href="file:///etc/passwd" width="10" height="10"/></svg>'
         self.assertIsNone(rendered_bounds(svg)[0])
@@ -55,6 +80,15 @@ class TestFallback(unittest.TestCase):
         self.assertEqual(result['model'], 'backup-model')
         self.assertEqual(result['fallback_from'], config.GEMINI_MODEL)
         self.assertEqual(post.call_args_list[1].args, ('prompt', 'backup-model'))
+
+    def test_503_uses_configured_fallback_after_retries(self):
+        ok = response(200, {'candidates': [{'content': {'parts': [{'text': GOOD_SVG}]}}]})
+        with patch('gemini_client._post_once', side_effect=[response(503)] * 4 + [ok]) as post, \
+             patch('gemini_client.time.sleep'):
+            result = gemini.call_gemini('prompt')
+        self.assertEqual(post.call_count, 5)
+        self.assertEqual(result['model'], 'backup-model')
+        self.assertEqual(result['api_retries'], 3)
 
     def test_fallback_not_used_for_invalid_key(self):
         with patch('gemini_client._post_once', return_value=response(401)) as post:

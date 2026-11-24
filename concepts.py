@@ -17,25 +17,18 @@ CONCEPTS = [
         "keywords": ["hypotenuse"],
         "review_hint": "Show a right angle and three squares on the corresponding sides. Use square units for all areas, and avoid overlapping labels.",
         "layout_hint": (
-            "Use EXACTLY these polygons (a 3-4-5 right triangle, no transforms):\n"
-            "- Triangle: points=\"320,290 320,380 440,380\" (right angle at 320,380)\n"
-            "- Square on the vertical side a (left): points=\"320,290 320,380 230,380 230,290\"\n"
-            "- Square on the horizontal side b (below): points=\"320,380 440,380 440,500 320,500\"\n"
-            "- Square on the hypotenuse c (up and right): points=\"320,290 440,380 530,260 410,170\"\n"
-            "- Right-angle marker: points=\"320,380 340,380 340,360 320,360\"\n"
-            "Labels: 'a' at (275,340), 'b' at (380,445), 'Hypotenuse c' at (425,275), "
-            "title at y=45, subtitle at y=68, formula 'a² + b² = c²' at (400,560).\n"
-            "Every text x must be between 40 and 760 and every y between 30 and 580.\n"
-            "\nREQUIRED ANIMATION: one looping story, 9 seconds, repeatCount=\"indefinite\", "
-            "using SMIL <animate>. Every shape and label must stay visible at the end of each loop.\n"
-            "1. 0s-2s: the square on side a fades in (fill-opacity 0.1 to 0.8) and the label "
-            "'a² = 9 square units' appears at (250,330).\n"
-            "2. 2s-4s: the square on side b does the same, with the label 'b² = 16 square units' at (380,480).\n"
-            "3. 4s-6s: the square on the hypotenuse fades in and the label 'c² = 25 square units' appears at (470,230).\n"
-            "4. 6s-8s: the three squares pulse together (stroke-width 2 to 5 and back) while the formula "
-            "'a² + b² = c²' fades in.\n"
-            "5. 8s-9s: hold, then restart.\n"
-            "Use different colours for a, b and c. Do not use transform attributes."
+            "Use the following exact polygons, with no transforms, for a 3–4–5 right triangle "
+            "(30 drawing units represent one side unit): "
+            "triangle: 320,265 320,355 440,355; "
+            "square on a: 320,265 320,355 230,355 230,265; "
+            "square on b: 320,355 440,355 440,475 320,475; "
+            "square on hypotenuse c: 320,265 440,355 530,235 410,145. "
+            "Draw the right-angle marker inside the triangle at (320,355). "
+            "Place centered area labels in their squares: a² = 9 at (275,304), "
+            "b² = 16 at (380,410), c² = 25 at (425,245), with separate "
+            "'square units' labels below. Label the triangle sides 3 and 4 and "
+            "identify the hypotenuse as c = 5 without covering any other label. "
+            "Caption: a² + b² = c² and 9 + 16 = 25. Pulse the squares in sequence."
         ),
     },
     {
@@ -49,6 +42,10 @@ CONCEPTS = [
         ),
         "keywords": ["centre", "radius", "diameter", "circumference"],
         "review_hint": "Draw a radius from the centre to the edge and a diameter across the centre equal to twice the radius; distinguish the circumference.",
+        "layout_hint": ("Use a circle centred at (260,300), radius 150. Draw the diameter "
+                        "from (110,300) to (410,300) and a distinct radius from (260,300) "
+                        "to (350,180), which lies on the circumference. Put a colour-coded "
+                        "legend on the right, and pulse the circle and line highlights."),
     },
     {
         "id": 3,
@@ -60,6 +57,15 @@ CONCEPTS = [
         ),
         "keywords": ["cell", "current", "voltage"],
         "review_hint": "Draw a single closed loop with the cell and two lamps electrically connected in series. Every wire must meet a component terminal; never leave a gap. Show the same current and the shared voltage.",
+        "layout_hint": ("Use two standard lamp symbols (a circle with a cross) centred at "
+                        "(320,255) and (480,255), radius 30. Join the wire exactly to their "
+                        "left and right edges. Use the path M200 335 V255 H290 M350 255 H450 "
+                        "M510 255 H640 V430 H200 V365. Draw the cell as horizontal plates "
+                        "at y=335 and y=365, each crossing x=200, with the longer plate "
+                        "positive. The plates represent the cell, not a broken wire. "
+                        "Label cell, current, voltage and both lamps; show conventional "
+                        "current arrows clockwise and Vcell = V1 + V2. Pulse arrows only "
+                        "as highlights, not as a simulation of moving charge."),
     },
     {
         "id": 4,
@@ -71,6 +77,11 @@ CONCEPTS = [
         ),
         "keywords": ["chlorophyll", "glucose", "oxygen", "carbon dioxide"],
         "review_hint": "Show water and carbon dioxide entering the leaf, light absorbed by chlorophyll, and glucose and oxygen as products; use clear arrows.",
+        "layout_hint": ("Place a leaf in the centre; arrows from the left carry carbon dioxide "
+                        "and water into it, a light-energy arrow points down into the leaf, "
+                        "and arrows on the right point outward to glucose and oxygen. Label "
+                        "chlorophyll in the leaf. Pulse the arrows as highlights. Show the "
+                        "word equation as a simplified summary, without implying light is matter."),
     },
     {
         "id": 5,
@@ -83,6 +94,12 @@ CONCEPTS = [
         ),
         "keywords": ["solid", "liquid", "gas"],
         "review_hint": "Show closely packed solid particles vibrating, closely packed liquid particles moving past each other, and widely spaced fast gas particles within their containers.",
+        "layout_hint": ("Use three labelled, equally sized panels. Show many close, ordered "
+                        "particles in the solid; close, irregular particles in the liquid; "
+                        "and fewer, widely spaced particles in the gas. Keep all particles "
+                        "inside their containers. Label solid vibrations, liquid particles "
+                        "moving past each other and fast gas motion. If particles merely pulse, "
+                        "say the pulse highlights them rather than depicting their paths."),
     },
 ]
 

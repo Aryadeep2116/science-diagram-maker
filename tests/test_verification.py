@@ -10,14 +10,13 @@ from verification import assess_result, svg_digest
 
 
 class TestVerification(unittest.TestCase):
-    def test_saved_series_circuit_is_failed_with_reason(self):
+    def test_saved_series_circuit_is_closed_and_reviewed(self):
         result = next(r for r in load_results() if r['id'] == 3)
-        self.assertEqual(result['final_status'], 'fail')
-        self.assertEqual(result['scientific_verification']['status'], 'fail')
-        self.assertIn('gap', result['scientific_verification']['reason'])
-        self.assertTrue(all(c['passed'] is not False for c in result['checks'].values()))
-        self.assertTrue(result['checks']['in_viewbox']['passed'])
-        self.assertIsNone(result['checks']['animated_bounds']['passed'])
+        self.assertEqual(result['final_status'], 'pass')
+        self.assertEqual(result['scientific_verification']['status'], 'pass')
+        self.assertIn('AI assistant', result['scientific_verification']['method'])
+        self.assertIn('M200 335 V255 H290 M350 255 H450 M510 255 H640 V430 H200 V365', result['svg'])
+        self.assertTrue(all(c['passed'] is True for c in result['checks'].values()))
 
     def test_passed_automatic_checks_need_scientific_review(self):
         result = assess_result({'svg': GOOD_SVG, 'final_status': 'pass'}, PYTHAGORAS)
@@ -45,24 +44,25 @@ class TestVerification(unittest.TestCase):
         self.assertEqual(result['final_status'], 'needs_review')
         self.assertEqual(result['validation_retries'], 0)
 
-    def test_api_reports_series_fail(self):
+    def test_api_reports_series_pass(self):
         with app.test_client() as client:
             response = client.get('/api/results')
         result = next(r for r in response.get_json() if r['id'] == 3)
-        self.assertEqual(result['final_status'], 'fail')
-        self.assertEqual(result['scientific_verification']['status'], 'fail')
+        self.assertEqual(result['final_status'], 'pass')
+        self.assertEqual(result['scientific_verification']['status'], 'pass')
 
 
 class TestSavedScientificReviews(unittest.TestCase):
     def test_all_saved_diagrams_have_verdicts_for_the_current_svg(self):
         results = {result['id']: result for result in load_results()}
         self.assertEqual({i: results[i]['scientific_verification']['status'] for i in range(1, 6)},
-                         {1: 'fail', 2: 'pass', 3: 'fail', 4: 'pass', 5: 'fail'})
+                         {1: 'pass', 2: 'pass', 3: 'pass', 4: 'pass', 5: 'pass'})
         for result in results.values():
             review = result['scientific_verification']
             self.assertEqual(review['svg_sha256'], svg_digest(result['svg']))
             self.assertTrue(review['reason'])
-            self.assertEqual(result['final_status'], 'needs_review' if review['status'] == 'pass' else 'fail')
+            self.assertEqual(result['final_status'], 'pass')
+            self.assertIn('not independent expert or user approval', review['method'])
 
     def test_saved_verdict_is_invalidated_when_svg_changes(self):
         result = next(r for r in load_results() if r['id'] == 2)

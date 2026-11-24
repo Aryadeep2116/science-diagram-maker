@@ -1,6 +1,6 @@
 # Science Diagram Maker
 
-Science Diagram Maker asks Gemini for animated SVG science diagrams, runs automatic checks, and lets a person record a scientific review. The saved examples can be viewed without a Gemini key. Live app: <https://science-diagram-maker-ahg7.onrender.com>
+Science Diagram Maker shows built-in animated SVG science diagrams and can ask Gemini for new ones. It runs automatic checks and lets a person record a scientific review. The built-in examples can be viewed without a Gemini key. Live app: <https://science-diagram-maker-ahg7.onrender.com>
 
 ## Run locally
 
@@ -20,31 +20,31 @@ Set environment variables locally in `.env`, or in the hosting service's environ
 - `GEMINI_FALLBACK_MODEL`: optional, different model available to the same project. After a 429, 503 or 404 from the primary, the server tries this model. It does not fall back for invalid keys or permission/request errors. Both models may share a quota, so fallback is not a cure for free-tier limits.
 - `GEMINI_FALLBACK_INPUT_PRICE` and `GEMINI_FALLBACK_OUTPUT_PRICE`: optional estimated USD per million tokens for the fallback. Both are needed for a fallback cost estimate. The editable primary price estimates are in `config.py`; update them for the selected model. Costs are estimates, not billing records; unknown fallback prices yield an unavailable estimate.
 
-The status panel reports local configuration and worker state, **not** a provider health check. A live attempt is the only way this app tests the key, access and quota. A 429 means rate limiting or quota exhaustion; the app honors Gemini's retry delay or uses 2/4/8-second backoff, up to three retries. It reports delays over 20 seconds rather than waiting automatically. A 503 indicates temporary upstream unavailability; 403 can mean access restrictions; 400 can indicate a request or model configuration problem. See the per-diagram message and Current issues panel for errors. A different key in the same project may share the same quota.
+The status panel reports local configuration and worker state, **not** a provider health check. A live attempt is the only way this app tests the key, access and quota. A 429 means rate limiting or quota exhaustion; the app honors Gemini's retry delay or uses 2/4/8-second backoff, up to three retries. It reports delays over 20 seconds rather than waiting automatically. A 503 means the Gemini service returned an availability error; the app retries and can use a configured fallback, but cannot guarantee that either model is available. The saved illustration remains visible and is not misrepresented as a new Gemini result. If 503 persists, set an accessible `GEMINI_FALLBACK_MODEL` on the server and restart, or try later; 403 can mean access restrictions; 400 can indicate a request or model configuration problem. See the per-diagram message and Current issues panel for errors. A different key in the same project may share the same quota.
 
 ## Checks and review
 
-Each concept has specific scientific guidance in its prompt. The pipeline extracts SVG from the response, checks it and, if a check fails, makes one validation retry with the failure reasons and practical correction advice. API retries and validation retries are separate. Successful attempts track the actual model and token-based cost estimates; if a later API attempt fails, its retry count may not be included in the saved result.
+Each concept has specific scientific and layout guidance in its prompt, including precise circuit connections and geometry. The prompt requests simple, readable SVG and bounded opacity highlights; these are visual highlights, not a simulation of particle or current motion. The pipeline extracts SVG from the response, checks it and, if a check fails, makes one validation retry with the failure reasons and practical correction advice. When a complete prior SVG is available and at most 16,000 characters, the repair prompt includes it as JSON-encoded data; otherwise it requests a fresh SVG. API retries and validation retries are separate. Successful attempts track the actual model and token-based cost estimates; if a later API attempt fails, its retry count may not be included in the saved result.
 
 Automatic checks cover XML/root, static viewBox bounds, title and visible labels, structural animation, concept keywords and SVG safety. They are **not** a scientific correctness test, a circuit connectivity test, or proof that the layout works everywhere.
 
 - The static viewBox check uses shape geometry and a padded `resvg-py` raster with the bundled DejaVu Sans font to detect visible overflow, including text. It no longer marks every text-bearing diagram unverified simply because it contains text. This is a bounded static snapshot, not a proof for all off-screen content or all browser fonts; unsupported/relative geometry, unsafe external resources or renderer failures remain unverified when they cannot be checked reliably. Animated motion is considered separately.
-- Animated bounds remain **UNVERIFIED**: the browser samples selected animation times and reports possible overflow as advisory information. Sampling can miss frames and effects or overestimate bounds; inspect playback manually. Structural animation detection does not prove correct playback, and overlap is not automatically verified.
+- Animated bounds pass only for a narrow opacity-only SMIL subset when the fully visible static snapshot passes: the animation cannot enlarge the static painted region. Other animations remain **UNVERIFIED**; the browser samples selected times and reports possible overflow as advisory information. Sampling can miss frames and effects or overestimate bounds; inspect playback manually. Structural animation detection does not prove correct playback, and overlap is not automatically verified.
 - A reviewer must explicitly choose **Verify & approve** or **Verify & reject** after checking the science. The browser records the decision, optional note and time for that exact SVG. A changed SVG needs a new review. A scientific approval never overrides a failed or unverified automatic check: a failure yields FAIL, and otherwise any uncertainty yields NEEDS REVIEW. Only all passing automatic checks plus a scientific pass yield PASS. Rejection yields FAIL.
 
-### Saved examples
+### Built-in examples
 
-The following scientific assessments apply only to the exact SVGs currently in `results.json`. Reviews used SVG source and static renders and inspected animation paths, not playback in every browser. Overall outcomes also account for automatic checks; animated bounds remain unverified.
+The five built-in examples are hand-authored in `scripts/build_default_results.py` and saved in `results.json`. They require no Gemini API call. Their opacity animations highlight content without moving it out of frame; the matter diagram explicitly notes that the pulse is not a simulation of particle motion. Run `python scripts/build_default_results.py` to rebuild them; this overwrites `results.json` and replaces any batch-generated results.
 
-| Concept | Overall | Scientific review | Estimated USD | Validation / API retries |
-| --- | --- | --- | ---: | ---: |
-| Pythagoras’ theorem | FAIL | Fail: area labels use units instead of square units; an animated label overlaps; title typo | $0.000973 | 0 / 0 |
-| Parts of a circle | NEEDS REVIEW | Pass | $0.000741 | 0 / 0 |
-| Series circuit | FAIL | Fail: right-hand wire gap and unclear component connections | $0.001627 | 1 / 1 |
-| Photosynthesis | NEEDS REVIEW | Pass at concept level; simplified word equation | $0.001860 | 0 / 0 |
-| States of matter | FAIL | Fail: liquid particles are widely separated | $0.001802 | 0 / 2 |
+| Concept | AI-assisted assessment | Key correction |
+| --- | --- | --- |
+| Pythagoras’ theorem | Pass | A 3–4–5 right triangle with correctly labelled square-unit areas. |
+| Parts of a circle | Pass | Radius, diameter, centre and circumference are distinguished. |
+| Series circuit | Pass | Cell and both lamp symbols form one closed series loop. |
+| Photosynthesis | Pass | Correct inputs, products, light and chlorophyll at a simplified concept level. |
+| States of matter | Pass | Solid and liquid particles are close; gas particles are far apart. |
 
-`results.json` is the source for the saved examples and may change if the batch command is run. Browser reviews can differ from those saved assessments; they are human assertions, not independent automated verification.
+These assessments are an **AI assistant's review of the source and rendered layout**, tied to each SVG hash; they are not independent expert certification or the user's personal approval. All six automatic checks pass for these examples, so their overall status is PASS based on that assessment. A person should still inspect the science and animation before relying on them, and can record their own browser review. A changed SVG invalidates the recorded assessment. Built-in results show zero API cost and calls; old Gemini run costs do not apply to the replacement illustrations.
 
 ## Persistence and deployment
 
