@@ -154,6 +154,7 @@ function buildRow(raw) {
   const verificationClass = verification.status === "pass" ? "pass" : verification.status === "fail" ? "fail" : "unverified";
   const overallClass = r.final_status === "pass" ? "pass" : r.final_status === "fail" ? "fail" : "unverified";
   const overallLabel = {pass: "PASSED", fail: "FAILED", needs_review: "NEEDS REVIEW"}[r.final_status] || "NEEDS REVIEW";
+  const previousRun = r.metrics_source === "previous_gemini_run";
   card.innerHTML = `
     <div class="card-header">
       <div class="card-heading"><span class="card-number">${esc(String(r.id).padStart(2, "0"))}</span><div><h3>${esc(r.name)}</h3><p>${esc(r.subject)} <span aria-hidden="true">·</span> Science concept</p></div></div>
@@ -176,7 +177,7 @@ function buildRow(raw) {
       </div>
     </div>
     <p class="generation-feedback" role="status" aria-live="polite" hidden></p>
-    <div class="card-footer"><div class="metrics"><span><strong>${r.cost_usd == null ? "Unavailable" : "$" + esc(r.cost_usd)}</strong> estimated cost</span><span><strong>${esc(r.validation_retries)}</strong> validation retries</span><span><strong>${esc(r.api_retries)}</strong> API retries</span><span><strong>${esc(r.input_tokens)} / ${esc(r.output_tokens)}</strong> tokens in / out</span><span><strong>${esc(r.latency_seconds)}s</strong></span><span>${esc(r.model)}</span>${r.note ? `<br>Note: ${esc(r.note)}` : ""}</div>
+    <div class="card-footer"><div class="metrics">${previousRun ? '<p class="metrics-provenance">Earlier Gemini run · different SVG</p>' : ''}<span><strong>${r.cost_usd == null ? "Unavailable" : "$" + esc(r.cost_usd)}</strong> estimated cost</span><span><strong>${esc(r.validation_retries)}</strong> validation retries</span><span><strong>${esc(r.api_retries)}</strong> API retries</span><span><strong>${esc(r.input_tokens)} / ${esc(r.output_tokens)}</strong> tokens in / out</span><span><strong>${esc(r.latency_seconds)}s</strong></span><span>${esc(r.model)}</span>${r.note ? `<br>Note: ${esc(r.note)}` : ""}</div>
       <div class="generation-actions">${liveIds.has(r.id) ? '<button type="button" class="restore-saved">Restore saved diagram</button>' : ''}<button type="button" class="generate">✦ &nbsp;Generate live</button></div></div>`;
 
   const feedback = card.querySelector(".generation-feedback");

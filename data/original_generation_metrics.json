@@ -1,0 +1,57 @@
+{
+  "1": {
+    "model": "gemini-3.5-flash-lite",
+    "input_tokens": 1101,
+    "output_tokens": 2157,
+    "cost_usd": 0.000973,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 12.5,
+    "generated_at": "2026-11-24T13:33:13+00:00",
+    "svg_sha256": "a93aea20aca900388a723e8d4c2610a8a0ff75edfb65c35f6175a611c4b7c4e2"
+  },
+  "2": {
+    "model": "gemini-3.5-flash-lite",
+    "input_tokens": 323,
+    "output_tokens": 1773,
+    "cost_usd": 0.000741,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 5.6,
+    "generated_at": "2026-11-24T08:58:31+00:00",
+    "svg_sha256": "44458ca000b8b26c9d831c604aa7cdd3c8f945821167515b4606779b9c4162d7"
+  },
+  "3": {
+    "model": "gemini-3.5-flash-lite",
+    "input_tokens": 990,
+    "output_tokens": 3820,
+    "cost_usd": 0.001627,
+    "validation_retries": 1,
+    "api_retries": 1,
+    "latency_seconds": 14.8,
+    "generated_at": "2026-11-24T13:38:50+00:00",
+    "svg_sha256": "31f7072de5530ee2fccb2d361cc35cc3afce04f15e0bde3b69e6ca28686e5a50"
+  },
+  "4": {
+    "model": "gemini-3.5-flash-lite",
+    "input_tokens": 302,
+    "output_tokens": 4574,
+    "cost_usd": 0.00186,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 10.8,
+    "generated_at": "2026-11-24T08:59:00+00:00",
+    "svg_sha256": "e3393f58e3263fb245b5df8b5288f8a8e81a8ba97d7c01ee19703d275e6db1d2"
+  },
+  "5": {
+    "model": "gemini-3.5-flash-lite",
+    "input_tokens": 316,
+    "output_tokens": 4427,
+    "cost_usd": 0.001802,
+    "validation_retries": 0,
+    "api_retries": 2,
+    "latency_seconds": 30.9,
+    "generated_at": "2026-11-24T08:59:36+00:00",
+    "svg_sha256": "0c8e9adf38ffddb1940498d5738706b6607a85d873b4b73cded5630aca35635d"
+  }
+}
