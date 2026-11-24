@@ -24,7 +24,7 @@ The status panel reports local configuration and worker state, **not** a provide
 
 ## Checks and review
 
-Each concept has specific scientific and layout guidance in its prompt, including precise circuit connections and geometry. The prompt requests simple, readable SVG and bounded opacity highlights; these are visual highlights, not a simulation of particle or current motion. The pipeline extracts SVG from the response, checks it and, if a check fails, makes one validation retry with the failure reasons and practical correction advice. When a complete prior SVG is available and at most 16,000 characters, the repair prompt includes it as JSON-encoded data; otherwise it requests a fresh SVG. API retries and validation retries are separate. Successful attempts track the actual model and token-based cost estimates; if a later API attempt fails, its retry count may not be included in the saved result.
+Each concept has specific scientific and layout guidance in its prompt, including precise circuit connections and geometry. The prompt requests readable SVG with meaningful schematic motion rather than opacity-only blinking; generated results still need scientific and bounds review. The pipeline extracts SVG from the response, checks it and, if a check fails, makes one validation retry with the failure reasons and practical correction advice. When a complete prior SVG is available and at most 16,000 characters, the repair prompt includes it as JSON-encoded data; otherwise it requests a fresh SVG. API retries and validation retries are separate. Successful attempts track the actual model and token-based cost estimates; if a later API attempt fails, its retry count may not be included in the saved result.
 
 Automatic checks cover XML/root, static viewBox bounds, title and visible labels, structural animation, concept keywords and SVG safety. They are **not** a scientific correctness test, a circuit connectivity test, or proof that the layout works everywhere.
 
@@ -34,17 +34,17 @@ Automatic checks cover XML/root, static viewBox bounds, title and visible labels
 
 ### Built-in examples
 
-The five built-in examples are hand-authored in `scripts/build_default_results.py` and saved in `results.json`. They require no Gemini API call. Their opacity animations highlight content without moving it out of frame; the matter diagram explicitly notes that the pulse is not a simulation of particle motion. Run `python scripts/build_default_results.py` to rebuild them; this overwrites `results.json` and replaces any batch-generated results.
+The five built-in examples are hand-authored in `scripts/build_default_results.py` and saved in `results.json`. They require no Gemini API call. They use looping SMIL motion: coloured markers trace triangle sides, a radius rotates around the centre, markers travel in the conventional-current direction around the circuit, markers show inputs and outputs of photosynthesis, and solid, liquid and gas particles move differently. The motion is schematic, not to scale or a physical simulation. Run `python scripts/build_default_results.py` to rebuild them; this overwrites `results.json` and replaces any batch-generated results.
 
 | Concept | AI-assisted assessment | Key correction |
 | --- | --- | --- |
-| Pythagoras’ theorem | Pass | A 3–4–5 right triangle with correctly labelled square-unit areas. |
-| Parts of a circle | Pass | Radius, diameter, centre and circumference are distinguished. |
-| Series circuit | Pass | Cell and both lamp symbols form one closed series loop. |
-| Photosynthesis | Pass | Correct inputs, products, light and chlorophyll at a simplified concept level. |
-| States of matter | Pass | Solid and liquid particles are close; gas particles are far apart. |
+| Pythagoras’ theorem | Pass | Moving dots trace a 3–4–5 triangle; areas use square units. |
+| Parts of a circle | Pass | A rotating radius traces the circumference while its length remains fixed. |
+| Series circuit | Pass | Cell and both lamps form one loop; moving markers show conventional current direction. |
+| Photosynthesis | Pass | Moving markers show inputs, products and light direction at a simplified concept level. |
+| States of matter | Pass | Solids vibrate, close liquid particles slide past each other, and gas particles move faster and farther apart. |
 
-These assessments are an **AI assistant's review of the source and rendered layout**, tied to each SVG hash; they are not independent expert certification or the user's personal approval. All six automatic checks pass for these examples, so their overall status is PASS based on that assessment. A person should still inspect the science and animation before relying on them, and can record their own browser review. A changed SVG invalidates the recorded assessment. Built-in results show zero API cost and calls; old Gemini run costs do not apply to the replacement illustrations.
+These assessments are an **AI assistant's review of the source and sampled animation**, tied to each SVG hash; they are not independent expert certification or the user's personal approval. Moving animations remain unverified by the general bounds checker, so the examples show NEEDS REVIEW rather than a misleading automatic PASS. A person should still inspect the science and animation before relying on them, and can record their own browser review. A changed SVG invalidates the recorded assessment. Built-in results show zero API cost and calls; old Gemini run costs do not apply to the replacement illustrations.
 
 ## Persistence and deployment
 

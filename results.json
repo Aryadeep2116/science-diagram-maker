@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Pythagoras' theorem",
     "subject": "Maths",
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Pythagoras’ theorem</title><desc>Squares on the sides of a right triangle show that nine plus sixteen equals twenty-five square units.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Pythagoras’ theorem</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">A relationship between the sides of a right triangle</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<polygon points=\"320,265 320,355 230,355 230,265\" fill=\"#dbeafe\" stroke=\"#3b82f6\" stroke-width=\"3\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></polygon>\n<polygon points=\"320,355 440,355 440,475 320,475\" fill=\"#d1fae5\" stroke=\"#10b981\" stroke-width=\"3\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></polygon>\n<polygon points=\"320,265 440,355 530,235 410,145\" fill=\"#fce7df\" stroke=\"#e7704f\" stroke-width=\"3\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></polygon>\n<polygon points=\"320,265 320,355 440,355\" fill=\"#ffffff\" stroke=\"#253653\" stroke-width=\"3\"/>\n<path d=\"M320 337 H338 V355\" fill=\"none\" stroke=\"#253653\" stroke-width=\"2\"/>\n<text x=\"275\" y=\"304\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#1d4ed8\">a² = 9</text>\n<text x=\"275\" y=\"325\" font-family=\"DejaVu Sans\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#1d4ed8\">square units</text>\n<text x=\"380\" y=\"410\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#047857\">b² = 16</text>\n<text x=\"380\" y=\"433\" font-family=\"DejaVu Sans\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#047857\">square units</text>\n<text x=\"425\" y=\"245\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#b84a30\">c² = 25</text>\n<text x=\"425\" y=\"267\" font-family=\"DejaVu Sans\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#b84a30\">square units</text>\n<text x=\"329\" y=\"314\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#253653\">3</text>\n<text x=\"376\" y=\"348\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#253653\">4</text>\n<text x=\"554\" y=\"370\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#b84a30\">Hypotenuse c = 5</text>\n<path d=\"M548 365 L425 344\" stroke=\"#b84a30\" stroke-width=\"2\" fill=\"none\"/><rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">a² + b² = c²     ·     9 + 16 = 25</text>\n</svg>",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Pythagoras’ theorem</title><desc>Dots trace the three sides of a right triangle. Squares on the sides show that nine plus sixteen equals twenty-five square units.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Pythagoras’ theorem</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">A relationship between the sides of a right triangle</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<polygon points=\"320,265 320,355 230,355 230,265\" fill=\"#dbeafe\" stroke=\"#3b82f6\" stroke-width=\"3\"/>\n<polygon points=\"320,355 440,355 440,475 320,475\" fill=\"#d1fae5\" stroke=\"#10b981\" stroke-width=\"3\"/>\n<polygon points=\"320,265 440,355 530,235 410,145\" fill=\"#fce7df\" stroke=\"#e7704f\" stroke-width=\"3\"/>\n<polygon points=\"320,265 320,355 440,355\" fill=\"#ffffff\" stroke=\"#253653\" stroke-width=\"3\"/>\n<path d=\"M320 337 H338 V355\" fill=\"none\" stroke=\"#253653\" stroke-width=\"2\"/>\n<text x=\"275\" y=\"304\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#1d4ed8\">a² = 9</text>\n<text x=\"275\" y=\"325\" font-family=\"DejaVu Sans\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#1d4ed8\">square units</text>\n<text x=\"380\" y=\"410\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#047857\">b² = 16</text>\n<text x=\"380\" y=\"433\" font-family=\"DejaVu Sans\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#047857\">square units</text>\n<text x=\"425\" y=\"245\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#b84a30\">c² = 25</text>\n<text x=\"425\" y=\"267\" font-family=\"DejaVu Sans\" font-size=\"11\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#b84a30\">square units</text>\n<text x=\"329\" y=\"314\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#253653\">3</text>\n<text x=\"376\" y=\"348\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#253653\">4</text>\n<text x=\"554\" y=\"370\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#b84a30\">Hypotenuse c = 5</text>\n<path d=\"M548 365 L425 344\" stroke=\"#b84a30\" stroke-width=\"2\" fill=\"none\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#2563eb\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"side-a\"><animateMotion path=\"M320 265 L320 355 L320 265\" dur=\"4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#059669\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"side-b\"><animateMotion path=\"M320 355 L440 355 L320 355\" dur=\"4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#cf5837\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"hypotenuse\"><animateMotion path=\"M320 265 L440 355 L320 265\" dur=\"4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<text x=\"605\" y=\"440\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Dots trace each side</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">a² + b² = c²     ·     9 + 16 = 25</text>\n</svg>",
     "model": "Built-in illustration",
     "input_tokens": 0,
     "output_tokens": 0,
@@ -14,9 +14,9 @@
     "note": "Built-in example; no Gemini request was made.",
     "scientific_verification": {
       "status": "pass",
-      "reason": "The 3–4–5 triangle is right-angled; the side squares have areas 9, 16 and 25 square units, with 9 + 16 = 25.",
-      "svg_sha256": "1bf761034d691ee2acf865deb16798e000b748ee6c284b1b52a66811b4d66a94",
-      "method": "AI assistant assessment of SVG geometry, labels and rendered layout; not independent expert or user approval."
+      "reason": "The 3–4–5 triangle is right-angled; moving markers trace its sides, and the square areas are 9, 16 and 25 square units.",
+      "svg_sha256": "52524ce6f4c007ccf0e21b84f04c17d4346c15cee74652e79af5a9081022747c",
+      "method": "AI assistant assessment of SVG geometry, labels and sampled animation; not independent expert or user approval."
     },
     "checks": {
       "valid_xml": {
@@ -28,196 +28,8 @@
         "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
       },
       "animated_bounds": {
-        "passed": true,
-        "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."
-      },
-      "title_and_labels": {
-        "passed": true,
-        "reason": "Title found and 12 directly rendered text labels."
-      },
-      "has_animation": {
-        "passed": true,
-        "reason": "Found a timed <animate> animation."
-      },
-      "custom_checks": {
-        "passed": true,
-        "reason": "Keywords present and SVG is safe."
-      }
-    },
-    "final_status": "pass"
-  },
-  {
-    "id": 2,
-    "name": "Parts of a circle",
-    "subject": "Maths",
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Parts of a circle</title><desc>The diameter passes through the centre, a radius joins centre and circumference, and the circumference is the outer edge.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Parts of a circle</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">Four ways to describe the same circle</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<circle cx=\"260\" cy=\"300\" r=\"150\" fill=\"#f0f6ff\" stroke=\"#395fc4\" stroke-width=\"7\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle>\n<line x1=\"110\" y1=\"300\" x2=\"410\" y2=\"300\" stroke=\"#0d9b82\" stroke-width=\"5\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></line>\n<line x1=\"260\" y1=\"300\" x2=\"350\" y2=\"180\" stroke=\"#ea8b32\" stroke-width=\"5\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></line>\n<circle cx=\"260\" cy=\"300\" r=\"7\" fill=\"#263b5c\"/>\n<circle cx=\"472\" cy=\"184\" r=\"7\" fill=\"#263b5c\"/><text x=\"491\" y=\"190\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#263b5c\">Centre</text>\n<text x=\"491\" y=\"212\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">The fixed middle point</text>\n<circle cx=\"472\" cy=\"239\" r=\"7\" fill=\"#ea8b32\"/><text x=\"491\" y=\"245\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#ea8b32\">Radius</text>\n<text x=\"491\" y=\"267\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">Centre to circumference</text>\n<circle cx=\"472\" cy=\"294\" r=\"7\" fill=\"#0d9b82\"/><text x=\"491\" y=\"300\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#0d9b82\">Diameter</text>\n<text x=\"491\" y=\"322\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">Across the centre: 2 radii</text>\n<circle cx=\"472\" cy=\"349\" r=\"7\" fill=\"#395fc4\"/><text x=\"491\" y=\"355\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#395fc4\">Circumference</text>\n<text x=\"491\" y=\"377\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">Distance around the edge</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Diameter = 2 × radius</text>\n</svg>",
-    "model": "Built-in illustration",
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "cost_usd": 0,
-    "validation_retries": 0,
-    "api_retries": 0,
-    "latency_seconds": 0,
-    "note": "Built-in example; no Gemini request was made.",
-    "scientific_verification": {
-      "status": "pass",
-      "reason": "The diameter passes through the centre; the radius joins the centre to the circumference, and the diameter is twice the radius.",
-      "svg_sha256": "31a03bdcf4bc1826df87be2534ef807508de874f16237b50bb09137283e516e8",
-      "method": "AI assistant assessment of SVG geometry, labels and rendered layout; not independent expert or user approval."
-    },
-    "checks": {
-      "valid_xml": {
-        "passed": true,
-        "reason": "SVG parsed correctly."
-      },
-      "in_viewbox": {
-        "passed": true,
-        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
-      },
-      "animated_bounds": {
-        "passed": true,
-        "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."
-      },
-      "title_and_labels": {
-        "passed": true,
-        "reason": "Title found and 11 directly rendered text labels."
-      },
-      "has_animation": {
-        "passed": true,
-        "reason": "Found a timed <animate> animation."
-      },
-      "custom_checks": {
-        "passed": true,
-        "reason": "Keywords present and SVG is safe."
-      }
-    },
-    "final_status": "pass"
-  },
-  {
-    "id": 3,
-    "name": "Series circuit",
-    "subject": "Physics",
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Series circuit</title><desc>A cell and two lamps are connected in one complete loop. Conventional current leaves the positive cell terminal and flows through both lamps.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Series circuit</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">One closed loop · the same current everywhere</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<path d=\"M200 335 V255 H290 M350 255 H450 M510 255 H640 V430 H200 V365\" fill=\"none\" stroke=\"#243851\" stroke-width=\"5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n<line x1=\"174\" y1=\"335\" x2=\"226\" y2=\"335\" stroke=\"#243851\" stroke-width=\"5\"/>\n<line x1=\"185\" y1=\"365\" x2=\"215\" y2=\"365\" stroke=\"#243851\" stroke-width=\"5\"/>\n<circle cx=\"320\" cy=\"255\" r=\"30\" fill=\"#fff9df\" stroke=\"#243851\" stroke-width=\"4\"/>\n<circle cx=\"480\" cy=\"255\" r=\"30\" fill=\"#fff9df\" stroke=\"#243851\" stroke-width=\"4\"/>\n<path d=\"M301 236 L339 274 M339 236 L301 274 M461 236 L499 274 M499 236 L461 274\" stroke=\"#d89512\" stroke-width=\"3\"/>\n<path d=\"M387 255 H422 M413 247 L422 255 L413 263\" fill=\"none\" stroke=\"#3974db\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></path><path d=\"M562 255 H597 M588 247 L597 255 L588 263\" fill=\"none\" stroke=\"#3974db\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></path><text x=\"320\" y=\"205\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Lamp 1</text>\n<text x=\"480\" y=\"205\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Lamp 2</text>\n<text x=\"128\" y=\"354\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Cell</text>\n<text x=\"242\" y=\"342\" font-family=\"DejaVu Sans\" font-size=\"18\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#cc5950\">+</text>\n<text x=\"235\" y=\"372\" font-family=\"DejaVu Sans\" font-size=\"18\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">−</text>\n<text x=\"420\" y=\"394\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#3974db\">Same current through both lamps</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Cell voltage = voltage across lamp 1 + lamp 2</text>\n</svg>",
-    "model": "Built-in illustration",
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "cost_usd": 0,
-    "validation_retries": 0,
-    "api_retries": 0,
-    "latency_seconds": 0,
-    "note": "Built-in example; no Gemini request was made.",
-    "scientific_verification": {
-      "status": "pass",
-      "reason": "The wires connect each cell terminal to both lamps in one closed loop; the current is the same throughout and the lamp voltages sum to the cell voltage.",
-      "svg_sha256": "088c35722dbe5d5629e03c09e172a94ed20e636083bad1ab9e674a36e85d7a07",
-      "method": "AI assistant assessment of SVG geometry, labels and rendered layout; not independent expert or user approval."
-    },
-    "checks": {
-      "valid_xml": {
-        "passed": true,
-        "reason": "SVG parsed correctly."
-      },
-      "in_viewbox": {
-        "passed": true,
-        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
-      },
-      "animated_bounds": {
-        "passed": true,
-        "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."
-      },
-      "title_and_labels": {
-        "passed": true,
-        "reason": "Title found and 9 directly rendered text labels."
-      },
-      "has_animation": {
-        "passed": true,
-        "reason": "Found a timed <animate> animation."
-      },
-      "custom_checks": {
-        "passed": true,
-        "reason": "Keywords present and SVG is safe."
-      }
-    },
-    "final_status": "pass"
-  },
-  {
-    "id": 4,
-    "name": "Photosynthesis",
-    "subject": "Biology",
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Photosynthesis</title><desc>Carbon dioxide and water enter the leaf. Light energy absorbed by chlorophyll supports production of glucose and oxygen.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Photosynthesis</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">Plants use light energy to make glucose</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<path d=\"M290 324 C290 241 367 205 432 226 C475 240 510 275 510 311 C490 368 420 397 361 382 C326 374 301 354 290 324 Z\" fill=\"#d9f5d5\" stroke=\"#398c5c\" stroke-width=\"4\"/>\n<path d=\"M310 342 C357 323 416 300 484 258 M359 323 L344 286 M395 307 L385 270 M419 299 L445 323\" fill=\"none\" stroke=\"#398c5c\" stroke-width=\"3\"/>\n<circle cx=\"400\" cy=\"158\" r=\"23\" fill=\"#fbd466\" stroke=\"#e4a92c\" stroke-width=\"3\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><path d=\"M400 189 V218 M392 210 L400 218 L408 210\" stroke=\"#e4a92c\" stroke-width=\"4\" fill=\"none\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></path><path d=\"M184 264 H281 M270 256 L281 264 L270 272\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></path><path d=\"M184 364 H281 M270 356 L281 364 L270 372\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></path><path d=\"M520 264 H615 M604 256 L615 264 L604 272\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></path><path d=\"M520 364 H615 M604 356 L615 364 L604 372\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></path><text x=\"452\" y=\"163\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#966610\">Light energy</text>\n<text x=\"400\" y=\"415\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#246941\">Leaf contains chlorophyll</text>\n<text x=\"105\" y=\"253\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Carbon dioxide</text>\n<text x=\"105\" y=\"353\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Water</text>\n<text x=\"684\" y=\"253\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Oxygen</text>\n<text x=\"684\" y=\"353\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Glucose</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Carbon dioxide + water  →  glucose + oxygen</text>\n</svg>",
-    "model": "Built-in illustration",
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "cost_usd": 0,
-    "validation_retries": 0,
-    "api_retries": 0,
-    "latency_seconds": 0,
-    "note": "Built-in example; no Gemini request was made.",
-    "scientific_verification": {
-      "status": "pass",
-      "reason": "Carbon dioxide and water are inputs; chlorophyll absorbs light, and glucose and oxygen are products. The word equation is simplified.",
-      "svg_sha256": "0bbf2a584bc24ea8c80f5981cdae7cec3f7e4bb7a74d68958a8b061a92d14eaa",
-      "method": "AI assistant assessment of SVG geometry, labels and rendered layout; not independent expert or user approval."
-    },
-    "checks": {
-      "valid_xml": {
-        "passed": true,
-        "reason": "SVG parsed correctly."
-      },
-      "in_viewbox": {
-        "passed": true,
-        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
-      },
-      "animated_bounds": {
-        "passed": true,
-        "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."
-      },
-      "title_and_labels": {
-        "passed": true,
-        "reason": "Title found and 9 directly rendered text labels."
-      },
-      "has_animation": {
-        "passed": true,
-        "reason": "Found a timed <animate> animation."
-      },
-      "custom_checks": {
-        "passed": true,
-        "reason": "Keywords present and SVG is safe."
-      }
-    },
-    "final_status": "pass"
-  },
-  {
-    "id": 5,
-    "name": "States of matter",
-    "subject": "Chemistry",
-    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>States of matter</title><desc>Solid particles are closely packed and vibrate; liquid particles are close and move past one another; gas particles are far apart and move freely.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">States of matter</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">Particle models: spacing and movement</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<rect x=\"50\" y=\"143\" width=\"214\" height=\"287\" rx=\"15\" fill=\"#f7f9fd\" stroke=\"#e1e7f0\" stroke-width=\"2\"/><text x=\"157\" y=\"176\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#507cde\">SOLID</text>\n<rect x=\"70\" y=\"198\" width=\"174\" height=\"165\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c9d5e4\" stroke-width=\"2\"/><rect x=\"293\" y=\"143\" width=\"214\" height=\"287\" rx=\"15\" fill=\"#f7f9fd\" stroke=\"#e1e7f0\" stroke-width=\"2\"/><text x=\"400\" y=\"176\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#0da68b\">LIQUID</text>\n<rect x=\"313\" y=\"198\" width=\"174\" height=\"165\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c9d5e4\" stroke-width=\"2\"/><rect x=\"536\" y=\"143\" width=\"214\" height=\"287\" rx=\"15\" fill=\"#f7f9fd\" stroke=\"#e1e7f0\" stroke-width=\"2\"/><text x=\"643\" y=\"176\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#d9893e\">GAS</text>\n<rect x=\"556\" y=\"198\" width=\"174\" height=\"165\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c9d5e4\" stroke-width=\"2\"/><circle cx=\"108\" cy=\"228\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"139\" cy=\"228\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"170\" cy=\"228\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"201\" cy=\"228\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"108\" cy=\"262\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"139\" cy=\"262\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"170\" cy=\"262\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"201\" cy=\"262\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"108\" cy=\"296\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"139\" cy=\"296\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"170\" cy=\"296\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"201\" cy=\"296\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"108\" cy=\"330\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"139\" cy=\"330\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"170\" cy=\"330\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"201\" cy=\"330\" r=\"12\" fill=\"#507cde\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"350\" cy=\"228\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"381\" cy=\"230\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"412\" cy=\"227\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"443\" cy=\"231\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"355\" cy=\"258\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"386\" cy=\"262\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"418\" cy=\"258\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"449\" cy=\"261\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"349\" cy=\"291\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"382\" cy=\"294\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"414\" cy=\"289\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"445\" cy=\"293\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"356\" cy=\"323\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"388\" cy=\"326\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"419\" cy=\"321\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"451\" cy=\"325\" r=\"12\" fill=\"#0da68b\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"571\" cy=\"226\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"635\" cy=\"218\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"704\" cy=\"237\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"601\" cy=\"275\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"680\" cy=\"290\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><circle cx=\"579\" cy=\"331\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"2s\" repeatCount=\"indefinite\"/></circle><circle cx=\"641\" cy=\"342\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"0s\" repeatCount=\"indefinite\"/></circle><circle cx=\"713\" cy=\"331\" r=\"11\" fill=\"#d9893e\"><animate attributeName=\"opacity\" values=\"1;0.35;1\" dur=\"3s\" begin=\"1s\" repeatCount=\"indefinite\"/></circle><text x=\"157\" y=\"392\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#435875\">Close, ordered</text>\n<text x=\"157\" y=\"413\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Vibrate in place</text>\n<text x=\"400\" y=\"392\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#435875\">Close, irregular</text>\n<text x=\"400\" y=\"413\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Move past each other</text>\n<text x=\"643\" y=\"392\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#435875\">Far apart</text>\n<text x=\"643\" y=\"413\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Move freely and fast</text>\n<text x=\"400\" y=\"474\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Pulsing highlights the particles; it does not depict their paths.</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Heating can change how particles are arranged and move</text>\n</svg>",
-    "model": "Built-in illustration",
-    "input_tokens": 0,
-    "output_tokens": 0,
-    "cost_usd": 0,
-    "validation_retries": 0,
-    "api_retries": 0,
-    "latency_seconds": 0,
-    "note": "Built-in example; no Gemini request was made.",
-    "scientific_verification": {
-      "status": "pass",
-      "reason": "Solid particles are closely packed and ordered; liquid particles are close and irregular; gas particles are widely separated. Captions describe the motion.",
-      "svg_sha256": "4edf5f42b4adc4d83f1f571143835f57badb57d436adb67577f5ba6680cd7b18",
-      "method": "AI assistant assessment of SVG geometry, labels and rendered layout; not independent expert or user approval."
-    },
-    "checks": {
-      "valid_xml": {
-        "passed": true,
-        "reason": "SVG parsed correctly."
-      },
-      "in_viewbox": {
-        "passed": true,
-        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
-      },
-      "animated_bounds": {
-        "passed": true,
-        "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."
+        "passed": null,
+        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
       },
       "title_and_labels": {
         "passed": true,
@@ -225,13 +37,201 @@
       },
       "has_animation": {
         "passed": true,
-        "reason": "Found a timed <animate> animation."
+        "reason": "Found a timed <animateMotion> animation."
       },
       "custom_checks": {
         "passed": true,
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "pass"
+    "final_status": "needs_review"
+  },
+  {
+    "id": 2,
+    "name": "Parts of a circle",
+    "subject": "Maths",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Parts of a circle</title><desc>The radius rotates around the centre and its endpoint traces the circumference. The diameter through the centre is twice the radius.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Parts of a circle</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">A radius sweeps around the centre</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<circle cx=\"260\" cy=\"300\" r=\"150\" fill=\"#f0f6ff\" stroke=\"#395fc4\" stroke-width=\"7\"/>\n<line x1=\"110\" y1=\"300\" x2=\"410\" y2=\"300\" stroke=\"#0d9b82\" stroke-width=\"5\"/>\n<g data-motion=\"rotating-radius\">\n  <line x1=\"260\" y1=\"300\" x2=\"350\" y2=\"180\" stroke=\"#ea8b32\" stroke-width=\"5\"/>\n  <circle cx=\"350\" cy=\"180\" r=\"7\" fill=\"#ea8b32\" stroke=\"#ffffff\" stroke-width=\"1.5\"/>\n  <animateTransform attributeName=\"transform\" type=\"rotate\" from=\"0 260 300\" to=\"360 260 300\" dur=\"8s\" repeatCount=\"indefinite\"/>\n</g>\n<circle cx=\"260\" cy=\"300\" r=\"7\" fill=\"#263b5c\"/>\n<circle cx=\"472\" cy=\"184\" r=\"7\" fill=\"#263b5c\"/><text x=\"491\" y=\"190\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#263b5c\">Centre</text>\n<text x=\"491\" y=\"212\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">The fixed middle point</text>\n<circle cx=\"472\" cy=\"239\" r=\"7\" fill=\"#ea8b32\"/><text x=\"491\" y=\"245\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#ea8b32\">Radius</text>\n<text x=\"491\" y=\"267\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">Centre to circumference</text>\n<circle cx=\"472\" cy=\"294\" r=\"7\" fill=\"#0d9b82\"/><text x=\"491\" y=\"300\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#0d9b82\">Diameter</text>\n<text x=\"491\" y=\"322\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">Across the centre: 2 radii</text>\n<circle cx=\"472\" cy=\"349\" r=\"7\" fill=\"#395fc4\"/><text x=\"491\" y=\"355\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#395fc4\">Circumference</text>\n<text x=\"491\" y=\"377\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">Path traced by the endpoint</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Diameter = 2 × radius</text>\n</svg>",
+    "model": "Built-in illustration",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 0,
+    "note": "Built-in example; no Gemini request was made.",
+    "scientific_verification": {
+      "status": "pass",
+      "reason": "The radius rotates about the centre with its endpoint on the circumference; the diameter through the centre is twice the radius.",
+      "svg_sha256": "0a89625aeffac89e8c3fcf60ddecc933be7e76955ec1c5aca8a11dd0877a533d",
+      "method": "AI assistant assessment of SVG geometry, labels and sampled animation; not independent expert or user approval."
+    },
+    "checks": {
+      "valid_xml": {
+        "passed": true,
+        "reason": "SVG parsed correctly."
+      },
+      "in_viewbox": {
+        "passed": true,
+        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
+      },
+      "animated_bounds": {
+        "passed": null,
+        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+      },
+      "title_and_labels": {
+        "passed": true,
+        "reason": "Title found and 11 directly rendered text labels."
+      },
+      "has_animation": {
+        "passed": true,
+        "reason": "Found a timed <animateTransform> animation."
+      },
+      "custom_checks": {
+        "passed": true,
+        "reason": "Keywords present and SVG is safe."
+      }
+    },
+    "final_status": "needs_review"
+  },
+  {
+    "id": 3,
+    "name": "Series circuit",
+    "subject": "Physics",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Series circuit</title><desc>Moving markers represent conventional current in a complete loop. They move from the positive cell terminal through both lamps and return to the negative terminal; marker speed is illustrative.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Series circuit</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">One closed loop · the same current everywhere</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<path d=\"M200 335 V255 H290 M350 255 H450 M510 255 H640 V430 H200 V365\" fill=\"none\" stroke=\"#243851\" stroke-width=\"5\" stroke-linejoin=\"round\" stroke-linecap=\"round\"/>\n<line x1=\"174\" y1=\"335\" x2=\"226\" y2=\"335\" stroke=\"#243851\" stroke-width=\"5\"/>\n<line x1=\"185\" y1=\"365\" x2=\"215\" y2=\"365\" stroke=\"#243851\" stroke-width=\"5\"/>\n<circle cx=\"320\" cy=\"255\" r=\"30\" fill=\"#fff9df\" stroke=\"#243851\" stroke-width=\"4\"/>\n<circle cx=\"480\" cy=\"255\" r=\"30\" fill=\"#fff9df\" stroke=\"#243851\" stroke-width=\"4\"/>\n<path d=\"M301 236 L339 274 M339 236 L301 274 M461 236 L499 274 M499 236 L461 274\" stroke=\"#d89512\" stroke-width=\"3\"/>\n<path d=\"M387 255 H422 M413 247 L422 255 L413 263\" fill=\"none\" stroke=\"#3974db\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M562 255 H597 M588 247 L597 255 L588 263\" fill=\"none\" stroke=\"#3974db\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#3974db\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"conventional-current\"><animateMotion path=\"M200 335 V255 H640 V430 H200 V365 V335\" dur=\"8s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#3974db\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"conventional-current\"><animateMotion path=\"M200 335 V255 H640 V430 H200 V365 V335\" dur=\"8s\" begin=\"-2s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#3974db\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"conventional-current\"><animateMotion path=\"M200 335 V255 H640 V430 H200 V365 V335\" dur=\"8s\" begin=\"-4s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#3974db\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"conventional-current\"><animateMotion path=\"M200 335 V255 H640 V430 H200 V365 V335\" dur=\"8s\" begin=\"-6s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<text x=\"320\" y=\"205\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Lamp 1</text>\n<text x=\"480\" y=\"205\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Lamp 2</text>\n<text x=\"128\" y=\"354\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Cell</text>\n<text x=\"242\" y=\"342\" font-family=\"DejaVu Sans\" font-size=\"18\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#cc5950\">+</text>\n<text x=\"235\" y=\"372\" font-family=\"DejaVu Sans\" font-size=\"18\" font-weight=\"normal\" text-anchor=\"start\" fill=\"#52637a\">−</text>\n<text x=\"420\" y=\"394\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#3974db\">Markers show conventional current direction</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Cell voltage = voltage across lamp 1 + lamp 2</text>\n</svg>",
+    "model": "Built-in illustration",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 0,
+    "note": "Built-in example; no Gemini request was made.",
+    "scientific_verification": {
+      "status": "pass",
+      "reason": "Both lamps and the cell form one loop; markers show conventional current direction, not electron flow or actual speed. Lamp voltages sum to cell voltage.",
+      "svg_sha256": "49454023454f2c586720c489de5f39b127cb6bb3a4e17821c44b9705b3934b69",
+      "method": "AI assistant assessment of SVG geometry, labels and sampled animation; not independent expert or user approval."
+    },
+    "checks": {
+      "valid_xml": {
+        "passed": true,
+        "reason": "SVG parsed correctly."
+      },
+      "in_viewbox": {
+        "passed": true,
+        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
+      },
+      "animated_bounds": {
+        "passed": null,
+        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+      },
+      "title_and_labels": {
+        "passed": true,
+        "reason": "Title found and 9 directly rendered text labels."
+      },
+      "has_animation": {
+        "passed": true,
+        "reason": "Found a timed <animateMotion> animation."
+      },
+      "custom_checks": {
+        "passed": true,
+        "reason": "Keywords present and SVG is safe."
+      }
+    },
+    "final_status": "needs_review"
+  },
+  {
+    "id": 4,
+    "name": "Photosynthesis",
+    "subject": "Biology",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>Photosynthesis</title><desc>Carbon dioxide and water enter the leaf. Light energy absorbed by chlorophyll supports production of glucose and oxygen.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">Photosynthesis</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">Plants use light energy to make glucose</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<path d=\"M290 324 C290 241 367 205 432 226 C475 240 510 275 510 311 C490 368 420 397 361 382 C326 374 301 354 290 324 Z\" fill=\"#d9f5d5\" stroke=\"#398c5c\" stroke-width=\"4\"/>\n<path d=\"M310 342 C357 323 416 300 484 258 M359 323 L344 286 M395 307 L385 270 M419 299 L445 323\" fill=\"none\" stroke=\"#398c5c\" stroke-width=\"3\"/>\n<circle cx=\"400\" cy=\"158\" r=\"23\" fill=\"#fbd466\" stroke=\"#e4a92c\" stroke-width=\"3\"/><path d=\"M400 189 V218 M392 210 L400 218 L408 210\" stroke=\"#e4a92c\" stroke-width=\"4\" fill=\"none\"/><path d=\"M184 264 H281 M270 256 L281 264 L270 272\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M184 364 H281 M270 356 L281 364 L270 372\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M520 264 H615 M604 256 L615 264 L604 272\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><path d=\"M520 364 H615 M604 356 L615 364 L604 372\" fill=\"none\" stroke=\"#5683c0\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/><circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#5683c0\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"carbon-dioxide-in\"><animateMotion path=\"M184 264 H281\" dur=\"2.5s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#5683c0\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"water-in\"><animateMotion path=\"M184 364 H281\" dur=\"2.5s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#5683c0\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"oxygen-out\"><animateMotion path=\"M520 264 H615\" dur=\"2.5s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#5683c0\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"glucose-out\"><animateMotion path=\"M520 364 H615\" dur=\"2.5s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"5\" fill=\"#e4a92c\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"light-in\"><animateMotion path=\"M400 189 V218\" dur=\"2.5s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<text x=\"452\" y=\"163\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"start\" fill=\"#966610\">Light energy</text>\n<text x=\"400\" y=\"415\" font-family=\"DejaVu Sans\" font-size=\"15\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#246941\">Leaf contains chlorophyll</text>\n<text x=\"105\" y=\"253\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Carbon dioxide</text>\n<text x=\"105\" y=\"353\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Water</text>\n<text x=\"684\" y=\"253\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Oxygen</text>\n<text x=\"684\" y=\"353\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243851\">Glucose</text>\n<text x=\"400\" y=\"475\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Moving dots show direction, not actual speed or scale</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Carbon dioxide + water  →  glucose + oxygen</text>\n</svg>",
+    "model": "Built-in illustration",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 0,
+    "note": "Built-in example; no Gemini request was made.",
+    "scientific_verification": {
+      "status": "pass",
+      "reason": "Moving markers show carbon dioxide and water entering, light arriving, and oxygen and glucose leaving; the word equation is simplified.",
+      "svg_sha256": "559004bb67900cd3fa01500e26db2390606436ee3c9a1bd341033dac46dbffd4",
+      "method": "AI assistant assessment of SVG geometry, labels and sampled animation; not independent expert or user approval."
+    },
+    "checks": {
+      "valid_xml": {
+        "passed": true,
+        "reason": "SVG parsed correctly."
+      },
+      "in_viewbox": {
+        "passed": true,
+        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
+      },
+      "animated_bounds": {
+        "passed": null,
+        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+      },
+      "title_and_labels": {
+        "passed": true,
+        "reason": "Title found and 10 directly rendered text labels."
+      },
+      "has_animation": {
+        "passed": true,
+        "reason": "Found a timed <animateMotion> animation."
+      },
+      "custom_checks": {
+        "passed": true,
+        "reason": "Keywords present and SVG is safe."
+      }
+    },
+    "final_status": "needs_review"
+  },
+  {
+    "id": 5,
+    "name": "States of matter",
+    "subject": "Chemistry",
+    "svg": "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 800 600\" role=\"img\">\n<title>States of matter</title><desc>Solid particles are closely packed and vibrate; liquid particles are close and move past one another; gas particles are far apart and move freely.</desc>\n<rect x=\"8\" y=\"8\" width=\"784\" height=\"584\" rx=\"22\" fill=\"#f6f8fc\"/>\n<text x=\"44\" y=\"55\" font-family=\"DejaVu Sans\" font-size=\"26\" font-weight=\"bold\" fill=\"#14233f\">States of matter</text>\n<text x=\"44\" y=\"83\" font-family=\"DejaVu Sans\" font-size=\"15\" fill=\"#52637a\">Particle models: spacing and movement</text>\n<rect x=\"30\" y=\"106\" width=\"740\" height=\"403\" rx=\"20\" fill=\"#ffffff\" stroke=\"#e1e7f0\" stroke-width=\"2\"/>\n<rect x=\"50\" y=\"143\" width=\"214\" height=\"287\" rx=\"15\" fill=\"#f7f9fd\" stroke=\"#e1e7f0\" stroke-width=\"2\"/><text x=\"157\" y=\"176\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#507cde\">SOLID</text>\n<rect x=\"70\" y=\"198\" width=\"174\" height=\"165\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c9d5e4\" stroke-width=\"2\"/><rect x=\"293\" y=\"143\" width=\"214\" height=\"287\" rx=\"15\" fill=\"#f7f9fd\" stroke=\"#e1e7f0\" stroke-width=\"2\"/><text x=\"400\" y=\"176\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#0da68b\">LIQUID</text>\n<rect x=\"313\" y=\"198\" width=\"174\" height=\"165\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c9d5e4\" stroke-width=\"2\"/><rect x=\"536\" y=\"143\" width=\"214\" height=\"287\" rx=\"15\" fill=\"#f7f9fd\" stroke=\"#e1e7f0\" stroke-width=\"2\"/><text x=\"643\" y=\"176\" font-family=\"DejaVu Sans\" font-size=\"16\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#d9893e\">GAS</text>\n<rect x=\"556\" y=\"198\" width=\"174\" height=\"165\" rx=\"8\" fill=\"#ffffff\" stroke=\"#c9d5e4\" stroke-width=\"2\"/><circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M108 228 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M139 228 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M170 228 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M201 228 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M108 262 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M139 262 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M170 262 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M201 262 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M108 296 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M139 296 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M170 296 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M201 296 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M108 330 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M139 330 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M170 330 l2 0 l-4 0 l2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#507cde\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"solid-vibration\"><animateMotion path=\"M201 330 l-2 0 l4 0 l-2 0\" dur=\"0.7s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M350 227 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M380 228 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M410 227 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M440 228 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M354 257 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.3s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M384 258 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.3s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M414 257 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.3s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M444 258 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.3s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M350 287 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.6s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M380 288 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.6s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M410 287 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.6s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M440 288 l7 0 l-14 0 l7 0\" dur=\"3.2s\" begin=\"-0.6s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M354 317 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.8999999999999999s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M384 318 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.8999999999999999s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M414 317 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.8999999999999999s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"11\" fill=\"#0da68b\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"liquid-exchange\"><animateMotion path=\"M444 318 l-7 0 l14 0 l-7 0\" dur=\"3.2s\" begin=\"-0.8999999999999999s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#d9893e\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"gas-motion\"><animateMotion path=\"M580 235 l13 10 l-13 -10\" dur=\"1.4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#d9893e\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"gas-motion\"><animateMotion path=\"M645 235 l-13 10 l13 -10\" dur=\"1.4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#d9893e\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"gas-motion\"><animateMotion path=\"M710 235 l-13 10 l13 -10\" dur=\"1.4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#d9893e\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"gas-motion\"><animateMotion path=\"M580 320 l-13 -10 l13 10\" dur=\"1.4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#d9893e\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"gas-motion\"><animateMotion path=\"M645 320 l13 -10 l-13 10\" dur=\"1.4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<circle cx=\"0\" cy=\"0\" r=\"10\" fill=\"#d9893e\" stroke=\"#ffffff\" stroke-width=\"1.5\" data-motion=\"gas-motion\"><animateMotion path=\"M710 320 l-13 -10 l13 10\" dur=\"1.4s\" begin=\"0s\" calcMode=\"linear\" repeatCount=\"indefinite\"/></circle>\n<text x=\"157\" y=\"392\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#435875\">Close, ordered</text>\n<text x=\"157\" y=\"413\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Vibrate in place</text>\n<text x=\"400\" y=\"392\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#435875\">Close, irregular</text>\n<text x=\"400\" y=\"413\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Move past each other</text>\n<text x=\"643\" y=\"392\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#435875\">Far apart</text>\n<text x=\"643\" y=\"413\" font-family=\"DejaVu Sans\" font-size=\"13\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Move freely and fast</text>\n<text x=\"400\" y=\"474\" font-family=\"DejaVu Sans\" font-size=\"14\" font-weight=\"normal\" text-anchor=\"middle\" fill=\"#52637a\">Motion is a simplified model, not to scale.</text>\n<rect x=\"30\" y=\"526\" width=\"740\" height=\"48\" rx=\"12\" fill=\"#eaf0fa\"/><text x=\"400\" y=\"556\" font-family=\"DejaVu Sans\" font-size=\"17\" font-weight=\"bold\" text-anchor=\"middle\" fill=\"#243a5a\">Heating can change how particles are arranged and move</text>\n</svg>",
+    "model": "Built-in illustration",
+    "input_tokens": 0,
+    "output_tokens": 0,
+    "cost_usd": 0,
+    "validation_retries": 0,
+    "api_retries": 0,
+    "latency_seconds": 0,
+    "note": "Built-in example; no Gemini request was made.",
+    "scientific_verification": {
+      "status": "pass",
+      "reason": "Solid particles vibrate about fixed positions; liquid particles slide past each other while close; gas particles are widely spaced and move faster in this simplified model.",
+      "svg_sha256": "7eafb058b8a5f2af2cc0be6f08a3d0c054a503677e8f3d2107c40978b2855fbd",
+      "method": "AI assistant assessment of SVG geometry, labels and sampled animation; not independent expert or user approval."
+    },
+    "checks": {
+      "valid_xml": {
+        "passed": true,
+        "reason": "SVG parsed correctly."
+      },
+      "in_viewbox": {
+        "passed": true,
+        "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
+      },
+      "animated_bounds": {
+        "passed": null,
+        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+      },
+      "title_and_labels": {
+        "passed": true,
+        "reason": "Title found and 13 directly rendered text labels."
+      },
+      "has_animation": {
+        "passed": true,
+        "reason": "Found a timed <animateMotion> animation."
+      },
+      "custom_checks": {
+        "passed": true,
+        "reason": "Keywords present and SVG is safe."
+      }
+    },
+    "final_status": "needs_review"
   }
 ]

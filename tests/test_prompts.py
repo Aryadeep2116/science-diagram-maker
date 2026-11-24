@@ -16,8 +16,9 @@ class TestGenerationPrompts(unittest.TestCase):
                 prompt = build_prompt(concept)
                 self.assertIn(', '.join(concept['keywords']), prompt)
                 self.assertIn('visible <text> labels', prompt)
-                self.assertIn('values="1;0.35;1"', prompt)
-                self.assertIn('Do not use CSS animation, animateMotion, animateTransform', prompt)
+                self.assertIn('<animateMotion', prompt)
+                self.assertIn('not just blinking', prompt)
+                self.assertIn('full stroke inside the viewBox', prompt)
                 self.assertIn(concept['review_hint'], prompt)
                 self.assertIn(concept['layout_hint'], prompt)
                 self.assertNotIn('pulse together (stroke-width', prompt)
@@ -29,10 +30,10 @@ class TestGenerationPrompts(unittest.TestCase):
         circuit = build_prompt(get_concept(3))
         self.assertIn('M510 255 H640 V430 H200 V365', circuit)
         self.assertIn('longer plate positive', circuit)
-        self.assertIn('not as a simulation of moving charge', circuit)
+        self.assertIn('not electrons or a depiction of actual drift speed', circuit)
         matter = build_prompt(get_concept(5))
         self.assertIn('close, irregular particles in the liquid', matter)
-        self.assertIn('rather than depicting their paths', matter)
+        self.assertIn('sliding past one another in liquids', matter)
 
     def test_retry_includes_specific_advice_and_encoded_previous_svg(self):
         previous_svg = '<svg><text>Example &amp; label</text></svg>'
