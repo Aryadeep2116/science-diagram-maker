@@ -11,6 +11,7 @@ import config
 from concepts import get_concept
 from gemini_client import GeminiError, GeminiKeyError, GeminiRateLimitError
 from pipeline import generate_one
+from verification import assess_result
 
 app = Flask(__name__)
 
@@ -24,7 +25,9 @@ def load_results():
     if not os.path.exists(config.RESULTS_FILE):
         return []
     with open(config.RESULTS_FILE, encoding="utf-8") as file:
-        return json.load(file)
+        results = json.load(file)
+    return [assess_result(result, get_concept(result["id"]))
+            if get_concept(result["id"]) else result for result in results]
 
 
 @app.route("/")

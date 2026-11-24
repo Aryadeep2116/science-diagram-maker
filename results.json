@@ -11,7 +11,7 @@
       },
       "in_viewbox": {
         "passed": true,
-        "reason": "Everything is inside the viewBox."
+        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
       },
       "title_and_labels": {
         "passed": true,
@@ -26,7 +26,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "pass",
+    "final_status": "fail",
     "model": "gemini-3.5-flash-lite",
     "input_tokens": 1101,
     "output_tokens": 2157,
@@ -35,7 +35,13 @@
     "api_retries": 0,
     "latency_seconds": 12.5,
     "note": "",
-    "generated_at": "2026-11-24T13:33:13+00:00"
+    "generated_at": "2026-11-24T13:33:13+00:00",
+    "scientific_verification": {
+      "status": "fail",
+      "reason": "The triangle and squares have the correct 3:4:5 proportions, but the animated square areas are labelled 9, 16 and 25 \"units\" rather than square units. The a label also overlaps its animated area label, and the SVG title misspells Pythagoras.",
+      "method": "Review of SVG source and static rendering; animation paths inspected in source.",
+      "svg_sha256": "a93aea20aca900388a723e8d4c2610a8a0ff75edfb65c35f6175a611c4b7c4e2"
+    }
   },
   {
     "id": 2,
@@ -49,7 +55,7 @@
       },
       "in_viewbox": {
         "passed": true,
-        "reason": "Everything is inside the viewBox."
+        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
       },
       "title_and_labels": {
         "passed": true,
@@ -73,7 +79,13 @@
     "api_retries": 0,
     "latency_seconds": 5.6,
     "note": "",
-    "generated_at": "2026-11-24T08:58:31+00:00"
+    "generated_at": "2026-11-24T08:58:31+00:00",
+    "scientific_verification": {
+      "status": "pass",
+      "reason": "The centre is at the circle centre; the rotating radius reaches the edge, the diameter runs through the centre and is twice the radius, and the circumference is the boundary. Definitions match the concept.",
+      "method": "Review of SVG source and static rendering; animation paths inspected in source.",
+      "svg_sha256": "44458ca000b8b26c9d831c604aa7cdd3c8f945821167515b4606779b9c4162d7"
+    }
   },
   {
     "id": 3,
@@ -87,7 +99,7 @@
       },
       "in_viewbox": {
         "passed": true,
-        "reason": "Everything is inside the viewBox."
+        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
       },
       "title_and_labels": {
         "passed": true,
@@ -102,7 +114,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "pass",
+    "final_status": "fail",
     "model": "gemini-3.5-flash-lite",
     "input_tokens": 990,
     "output_tokens": 3820,
@@ -111,7 +123,12 @@
     "api_retries": 1,
     "latency_seconds": 14.8,
     "note": "",
-    "generated_at": "2026-11-24T13:38:50+00:00"
+    "generated_at": "2026-11-24T13:38:50+00:00",
+    "scientific_verification": {
+      "status": "fail",
+      "reason": "The right-hand wire has a gap between (680, 280) and (680, 320), so the circuit is open rather than a complete series loop. The component symbols also do not show clear electrical connections.",
+      "svg_sha256": "31f7072de5530ee2fccb2d361cc35cc3afce04f15e0bde3b69e6ca28686e5a50"
+    }
   },
   {
     "id": 4,
@@ -125,7 +142,7 @@
       },
       "in_viewbox": {
         "passed": true,
-        "reason": "Everything is inside the viewBox."
+        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
       },
       "title_and_labels": {
         "passed": true,
@@ -149,7 +166,13 @@
     "api_retries": 0,
     "latency_seconds": 10.8,
     "note": "",
-    "generated_at": "2026-11-24T08:59:00+00:00"
+    "generated_at": "2026-11-24T08:59:00+00:00",
+    "scientific_verification": {
+      "status": "pass",
+      "reason": "Carbon dioxide and water are shown entering the leaf, light is directed toward the chlorophyll-containing leaf, and glucose and oxygen are shown as products. The word equation is a simplified representation, with light shown as an energy input.",
+      "method": "Review of SVG source and static rendering; animation paths inspected in source.",
+      "svg_sha256": "e3393f58e3263fb245b5df8b5288f8a8e81a8ba97d7c01ee19703d275e6db1d2"
+    }
   },
   {
     "id": 5,
@@ -163,7 +186,7 @@
       },
       "in_viewbox": {
         "passed": true,
-        "reason": "Everything is inside the viewBox."
+        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
       },
       "title_and_labels": {
         "passed": true,
@@ -178,7 +201,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "pass",
+    "final_status": "fail",
     "model": "gemini-3.5-flash-lite",
     "input_tokens": 316,
     "output_tokens": 4427,
@@ -187,6 +210,12 @@
     "api_retries": 2,
     "latency_seconds": 30.9,
     "note": "",
-    "generated_at": "2026-11-24T08:59:36+00:00"
+    "generated_at": "2026-11-24T08:59:36+00:00",
+    "scientific_verification": {
+      "status": "fail",
+      "reason": "The liquid particles are widely separated across the chamber, visually resembling the gas rather than the close-packed particles described by the label. This makes the particle-spacing comparison misleading, despite the moving-particle animation.",
+      "method": "Review of SVG source and static rendering; animation paths inspected in source.",
+      "svg_sha256": "0c8e9adf38ffddb1940498d5738706b6607a85d873b4b73cded5630aca35635d"
+    }
   }
 ]

@@ -14,6 +14,7 @@ import config
 from concepts import CONCEPTS, get_concept
 from gemini_client import GeminiError
 from pipeline import generate_one
+from verification import assess_result
 
 PREVIEW_FOLDER = "previews"
 
@@ -24,7 +25,8 @@ def load_existing():
         return {}
     with open(config.RESULTS_FILE, encoding="utf-8") as file:
         data = json.load(file)
-    return {item["id"]: item for item in data}
+    return {item["id"]: assess_result(item, get_concept(item["id"]))
+            if get_concept(item["id"]) else item for item in data}
 
 
 def save_results(results_by_id):

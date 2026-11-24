@@ -224,7 +224,7 @@ def in_viewbox(svg_text):
         extra = f" (and {len(problems) - 5} more)" if len(problems) > 5 else ""
         return False, (f"{len(problems)} element(s) are outside the viewBox "
                        f"{min_x:g} {min_y:g} {width:g} {height:g}: {shown}{extra}.")
-    return True, "Everything is inside the viewBox."
+    return True, "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
 
 
 
