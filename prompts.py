@@ -28,6 +28,12 @@ STRICT RULES:
    Use SMIL (<animate>, <animateTransform>, <animateMotion>) or CSS @keyframes.
 8. Do NOT use <script>, <foreignObject>, event attributes (onclick etc.) or external links/images.
 9. Keep the design clean and simple with good colour contrast on a light background.
+10. Do NOT use transform attributes. Write every shape with absolute coordinates instead
+    (for a tilted square, use a <polygon> with four explicit points).
+11. Keep the title and subtitle in their own band at the top (y between 20 and 70) and
+    draw NOTHING else in that band.
+12. Never place two text labels on top of each other; leave at least 20 units between labels,
+    and keep the bottom 80 units free for a formula caption only.
 """
 
 
