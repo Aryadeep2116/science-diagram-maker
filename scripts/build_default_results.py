@@ -164,17 +164,28 @@ REASONS = [
 ]
 
 
-def main():
+def build_results():
+    """Rebuild illustrations with the original runs' metrics, clearly attributed."""
+    metrics = json.loads((ROOT / 'data' / 'original_generation_metrics.json').read_text(encoding='utf-8'))
     diagrams = [pythagoras(), circle(), circuit(), photosynthesis(), states()]
     results = []
     for concept, svg, reason in zip(CONCEPTS, diagrams, REASONS):
         review = {'status': 'pass', 'reason': reason, 'svg_sha256': svg_digest(svg),
                   'method': 'AI assistant assessment of SVG geometry, labels and sampled animation; not independent expert or user approval.'}
+        previous_run = dict(metrics[str(concept['id'])])
+        previous_svg_digest = previous_run.pop('svg_sha256')
         result = assess_result({'id': concept['id'], 'name': concept['name'], 'subject': concept['subject'],
-            'svg': svg, 'model': 'Built-in illustration', 'input_tokens': 0, 'output_tokens': 0,
-            'cost_usd': 0, 'validation_retries': 0, 'api_retries': 0, 'latency_seconds': 0,
-            'note': 'Built-in example; no Gemini request was made.', 'scientific_verification': review}, concept)
+            'svg': svg, **previous_run,
+            'metrics_source': 'previous_gemini_run', 'metrics_svg_sha256': previous_svg_digest,
+            'illustration_source': 'built-in',
+            'note': 'Metrics describe an earlier Gemini-generated SVG, not this built-in illustration.',
+            'scientific_verification': review}, concept)
         results.append(result)
+    return results
+
+
+def main():
+    results = build_results()
     (ROOT / 'results.json').write_text(json.dumps(results, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     for result in results:
         print(result['id'], result['final_status'], [(k, v['reason']) for k, v in result['checks'].items() if v['passed'] is not True])
