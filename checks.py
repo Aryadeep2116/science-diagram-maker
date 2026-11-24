@@ -343,6 +343,43 @@ def _renderer_needs_browser(root):
             return True
     return False
 
+def opacity_only_animation(root):
+    """Recognize a deliberately narrow subset which cannot enlarge painted bounds.
+
+    No CSS, external targets, additive animations or implicit starting opacity.
+    Every animation only reduces its parent's default opacity from 1, so the
+    static fully opaque snapshot is an upper bound for these animations.
+    This is not a general SMIL or CSS animation verifier.
+    """
+    allowed = set(GEOMETRY) | {"svg", "g", "text", "title", "desc", "animate"}
+    for element in root.iter():
+        if (local_name(element.tag) not in allowed or element.get("style") is not None
+                or (element is not root and local_name(element.tag) == "svg")
+                or any(local_name(key) in {"filter", "mask", "clip-path", "marker-start", "marker-mid", "marker-end"}
+                       for key in element.attrib)):
+            return False
+    animations = []
+    for parent in root.iter():
+        for child in parent:
+            if local_name(child.tag) not in ANIMATION_TAGS:
+                continue
+            animations.append(child)
+            if (local_name(parent.tag) not in set(GEOMETRY) | {"g", "text"}
+                    or local_name(child.tag) != "animate" or child.get("attributeName") != "opacity"
+                    or parent.get("opacity", "1").strip() != "1"
+                    or set(child.attrib) - {"attributeName", "dur", "values", "repeatCount", "calcMode", "begin"}
+                    or child.get("calcMode", "linear") not in ("linear", "discrete")
+                    or not _valid_duration(child.get("dur"))):
+                return False
+            try:
+                values = [float(value) for value in child.get("values", "").split(";")]
+            except ValueError:
+                return False
+            if len(values) < 2 or any(not 0.2 <= value <= 1 for value in values):
+                return False
+    return bool(animations)
+
+
 def run_all_checks(svg_text, concept):
     """Run the automatic checks. Returns {check_name: {"passed": bool, "reason": str}}."""
     results = {}
@@ -366,9 +403,15 @@ def run_all_checks(svg_text, concept):
         else:
             results["in_viewbox"] = {"passed": None, "reason": "Static rendering skipped for unsafe SVG."}
     has_dynamic_content = any(local_name(e.tag) in ANIMATION_TAGS for e in root.iter()) or any(
-        "@keyframes" in "".join(e.itertext()).lower() for e in root.iter() if local_name(e.tag) == "style")
-    results["animated_bounds"] = ({"passed": None, "reason": "Animation movement and animated visibility need browser playback review; the renderer checks a static snapshot only."}
-                                  if has_dynamic_content else {"passed": True, "reason": "No animated movement to check."})
+        re.search(r"(?:@(?:-webkit-)?keyframes|(?:^|[;{])\s*(?:-webkit-)?(?:animation|transition)\s*(?:-|:))",
+                  ("".join(e.itertext()) if local_name(e.tag) == "style" else e.get("style", "")), re.I)
+        for e in root.iter())
+    if not has_dynamic_content:
+        results["animated_bounds"] = {"passed": True, "reason": "No animated movement to check."}
+    elif results["in_viewbox"]["passed"] is True and opacity_only_animation(root):
+        results["animated_bounds"] = {"passed": True, "reason": "Only opacity changes from a fully visible static snapshot; animation cannot enlarge its bounds. Browser rendering may differ."}
+    else:
+        results["animated_bounds"] = {"passed": None, "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."}
     results["title_and_labels"] = _pack(title_and_labels(svg_text))
     results["has_animation"] = _pack(has_animation(svg_text))
     results["custom_checks"] = _pack(custom_checks(svg_text, concept))
