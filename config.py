@@ -39,6 +39,7 @@ PRICE_PER_MILLION_OUTPUT_USD = 0.40
 MAX_API_RETRIES = 3
 API_RETRY_STATUS_CODES = (429, 503)
 BACKOFF_BASE_SECONDS = 2   # waits will be 2s, 4s, 8s (doubling each time)
+MAX_AUTOMATIC_RETRY_WAIT_SECONDS = 20  # do not keep the browser waiting for long quota resets
 
 # Validation failures (a check failed): retry ONCE, telling the model why.
 MAX_VALIDATION_RETRIES = 1

@@ -16,8 +16,15 @@ Model: gemini-3.5-flash-lite. Costs are estimates from editable prices in `confi
 Concepts 2 to 5 were generated with the first prompt; concept 1 was regenerated after I tightened the prompt.
 
 ## How it works
-Prompt builder, then Gemini call (429/503: wait 2s, 4s, 8s, max 3), then 5 checks, then one retry that tells the model exactly which checks failed. Tokens and cost are summed across attempts. API retries and validation retries are counted separately.
+Prompt builder, then Gemini call (429/503: retry up to 3 times, using the provider’s retry delay or 2s, 4s, 8s backoff), then 5 checks, then one retry that tells the model exactly which checks failed. Tokens and cost are summed across attempts. API retries and validation retries are counted separately.
 Checks: valid XML; basic viewBox bounds; title and 3+ text labels; at least one animation; required science keywords and a safety check. These checks do **not** verify scientific correctness or circuit connectivity. The viewBox result is **UNVERIFIED** when text extent, CSS, references or animation require renderer review. A diagram with an unverified check or without scientific verification for the exact SVG is marked **NEEDS REVIEW**, not PASS. Any automatic or scientific failure gives FAIL. The saved series circuit is marked FAIL: its right-hand wire has a gap, and its component symbols do not show clear connections. Changing the SVG invalidates a recorded scientific verdict. Browser Approve/Reject decisions are separate from the recorded scientific verification and are tied to the exact diagram.
+
+## Troubleshooting live generation
+
+- Live generation runs on the server and needs `GEMINI_API_KEY` in its environment. On Render, set it in the service’s Environment settings and redeploy/restart the service; do not paste the key into the page, repository, logs or chat. Optionally set `GEMINI_MODEL` to a model available to that project.
+- A 429 means Gemini rate limiting or quota exhaustion. The app respects `Retry-After` or Gemini `RetryInfo`; if the suggested wait exceeds 20 seconds, it reports the delay instead of retrying too early. Check the project’s Gemini quota and try again after the reset. A new key in the same project may still share the same quota.
+- A 503 is a temporary upstream availability issue, a 403 may indicate project/model access, and a 400 may be a request/model configuration issue; these are not automatically treated as invalid keys.
+- The button shows progress and errors beside the affected diagram. The original saved diagram remains visible after an error. A live result is only kept in the current page and is not written to `results.json`.
 
 ## Saved results
 

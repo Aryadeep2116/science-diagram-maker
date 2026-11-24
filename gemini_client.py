@@ -2,7 +2,11 @@
 # Talks to the Gemini REST API. Handles rate limits (429) and overload (503)
 # by waiting and retrying, and turns every other problem into a clear error.
 
+import math
+import re
 import time
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 import requests
 import config
 
@@ -17,19 +21,73 @@ class GeminiKeyError(GeminiError):
 
 
 class GeminiRateLimitError(GeminiError):
-    """Still rate-limited / overloaded after all retries."""
+    """Rate-limited after retries, or retry delay exceeds the interactive limit."""
+
+
+class GeminiOverloadedError(GeminiError):
+    """The upstream service is temporarily unavailable."""
+
+
+def _error_data(response):
+    """Read structured error metadata without returning upstream text to the user."""
+    try:
+        data = response.json()
+    except (ValueError, TypeError):
+        return {}
+    return data.get("error", {}) if isinstance(data, dict) and isinstance(data.get("error"), dict) else {}
+
+
+def _retry_delay(response):
+    """Return the provider's retry delay, including RetryInfo and HTTP-date headers."""
+    header = response.headers.get("Retry-After", "").strip()
+    if header.isdigit():
+        return int(header)
+    if header:
+        try:
+            date = parsedate_to_datetime(header)
+            if date.tzinfo is None:
+                date = date.replace(tzinfo=timezone.utc)
+            return max(0, math.ceil((date - datetime.now(timezone.utc)).total_seconds()))
+        except (TypeError, ValueError, OverflowError):
+            pass
+    details = _error_data(response).get("details", [])
+    if isinstance(details, list):
+        for detail in details:
+            if not isinstance(detail, dict) or not str(detail.get("@type", "")).endswith("RetryInfo"):
+                continue
+            match = re.fullmatch(r"(\d+(?:\.\d+)?)s", str(detail.get("retryDelay", "")))
+            if match:
+                return math.ceil(float(match.group(1)))
+    return None
 
 
 def _wait_time(response, attempt):
-    """How many seconds to wait before retry number `attempt` (0, 1, 2).
+    """Respect a provider delay, otherwise use exponential backoff."""
+    delay = _retry_delay(response)
+    return delay if delay is not None else config.BACKOFF_BASE_SECONDS * (2 ** attempt)
 
-    If the server sent a Retry-After header we respect it; otherwise we use
-    exponential backoff: 2s, 4s, 8s (base * 2^attempt).
-    """
-    header = response.headers.get("Retry-After")
-    if header and header.isdigit():                     # header is only usable if it's a plain number
-        return int(header)
-    return config.BACKOFF_BASE_SECONDS * (2 ** attempt)
+
+def _is_invalid_key(response):
+    error = _error_data(response)
+    details = error.get("details", [])
+    if isinstance(details, list) and any(isinstance(item, dict) and item.get("reason") in
+                                         ("API_KEY_INVALID", "API_KEY_EXPIRED") for item in details):
+        return True
+    # Some API responses omit structured details. Do not echo the provider message.
+    message = str(error.get("message", "")).lower()
+    return "api key not valid" in message or "api key expired" in message
+
+
+def _temporary_error(status, retry_delay=None):
+    if status == 429:
+        message = "Gemini rate limit or quota reached. Check the project's Gemini quota and try again later."
+        error_type = GeminiRateLimitError
+    else:
+        message = "Gemini is temporarily unavailable (HTTP 503). Try again later."
+        error_type = GeminiOverloadedError
+    if retry_delay is not None and retry_delay > 0:
+        message += f" Suggested wait: at least {retry_delay} seconds."
+    return error_type(message)
 
 
 def _post_once(prompt):
@@ -97,16 +155,22 @@ def call_gemini(prompt):
             return result
 
         if response.status_code in config.API_RETRY_STATUS_CODES:
-            if api_retries >= config.MAX_API_RETRIES:   # used up all 3 retries
-                raise GeminiRateLimitError(
-                    "The AI is busy or the free rate limit was hit. Please wait a minute and try again."
-                )
-            time.sleep(_wait_time(response, api_retries))   # wait, then loop to try again
+            delay = _wait_time(response, api_retries)
+            if api_retries >= config.MAX_API_RETRIES:
+                raise _temporary_error(response.status_code, _retry_delay(response))
+            if delay > config.MAX_AUTOMATIC_RETRY_WAIT_SECONDS:
+                # Never retry before the provider's requested reset time.
+                raise _temporary_error(response.status_code, delay)
+            time.sleep(delay)
             api_retries += 1
             continue
 
-        if response.status_code in (400, 401, 403):     # bad/invalid key or bad request
-            raise GeminiKeyError("The API key was rejected. Check GEMINI_API_KEY.")
+        if response.status_code in (400, 401, 403):
+            if response.status_code == 401 or _is_invalid_key(response):
+                raise GeminiKeyError("Gemini rejected the API key. Check GEMINI_API_KEY in the server environment.")
+            if response.status_code == 403:
+                raise GeminiError("Gemini denied access (HTTP 403). Check the project's API access and model permissions.")
+            raise GeminiError("Gemini rejected the request (HTTP 400). Check the model and request configuration.")
         if response.status_code == 404:
             raise GeminiError(f"Model '{config.GEMINI_MODEL}' was not found. Check GEMINI_MODEL.")
         raise GeminiError(f"The AI service returned an unexpected error (HTTP {response.status_code}).")

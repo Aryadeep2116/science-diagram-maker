@@ -9,7 +9,7 @@ from flask import Flask, jsonify, render_template
 
 import config
 from concepts import get_concept
-from gemini_client import GeminiError, GeminiKeyError, GeminiRateLimitError
+from gemini_client import GeminiError, GeminiKeyError, GeminiRateLimitError, GeminiOverloadedError
 from pipeline import generate_one
 from verification import assess_result
 
@@ -51,13 +51,17 @@ def generate(concept_id):
 
     if not generate_lock.acquire(blocking=False):      # someone is already generating
         return jsonify(error="Another generation is already running. Please wait."), 429
+    started = False
     try:
         wait = COOLDOWN_SECONDS - (time.time() - last_finished)
         if wait > 0:
             return jsonify(error=f"Please wait {int(wait) + 1} seconds and try again."), 429
+        started = True
         return jsonify(generate_one(concept))          # NOT saved to results.json
     except GeminiRateLimitError as error:
         return jsonify(error=str(error)), 429
+    except GeminiOverloadedError as error:
+        return jsonify(error=str(error)), 503
     except GeminiKeyError as error:
         return jsonify(error=str(error)), 500
     except GeminiError as error:
@@ -65,7 +69,8 @@ def generate(concept_id):
     except Exception:                                  # anything unexpected: friendly message
         return jsonify(error="Something went wrong on the server. Please try again."), 500
     finally:
-        last_finished = time.time()
+        if started:
+            last_finished = time.time()
         generate_lock.release()
 
 
