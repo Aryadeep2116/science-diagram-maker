@@ -34,22 +34,25 @@ OUTPUT AND LAYOUT
 
 SVG AND ANIMATION
 - Use simple SVG shapes, <g>, and <text> with presentation attributes such as
-  fill, stroke and font-size. Do not use CSS, style attributes, transforms,
-  filters, masks, markers, <defs>, <use>, scripts, event handlers or external
+  fill, stroke and font-size. Do not use CSS, style attributes, static transform
+  attributes, filters, masks, SVG marker elements, <defs>, <use>, scripts, event handlers or external
   resources. Use direct shapes instead of references or gradients.
   Use explicit coordinates for each shape and line; do not use HTML-only
   entities like &nbsp; or &sup2;. Use Unicode or valid XML escapes.
-- Highlight important parts in a meaningful looping sequence using SMIL opacity
-  only, without changing their size, position, stroke or visibility. For example,
-  put this inside a shape or group whose base opacity is 1 (or omitted):
-  <animate attributeName="opacity" values="1;0.35;1" dur="3s" repeatCount="indefinite"/>
-  Use one or more such animations with positive durations and values between
-  0.2 and 1. Do not use CSS animation, animateMotion, animateTransform, <set>,
-  href targets, additive animation or animation on an already transparent shape.
-  For <animate>, use only attributeName, values, dur, repeatCount, optional
-  begin (seconds) and optional calcMode (linear or discrete); use no keyTimes,
-  keySplines or other animation attributes. Keep essential labels legible throughout. An opacity pulse highlights an idea;
-  do not claim it physically shows particle movement or electric current flow.
+- Use meaningful looping SMIL motion, not just blinking: make markers travel
+  along relevant paths, or rotate a radius about its fixed centre. For example:
+  <circle cx="0" cy="0" r="5" fill="#2563eb"><animateMotion
+  path="M150 200 L300 200 L150 200" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  Use <animateMotion> with a numeric path, or <animateTransform type="rotate">
+  for a fixed-centre rotation. Use positive durations and repeatCount="indefinite".
+  Keep every moving shape and its full stroke inside the viewBox at every point;
+  use paths within the concept's diagram, not over labels or outside containers.
+  Keep essential text and static science geometry visible throughout.
+  Keep motion simple and label it as a schematic when speed or scale is illustrative.
+  Do not use CSS animation, scripts, external references or event handlers.
+  Do not present a moving dot as a literal particle if it represents a direction.
+
 
 SCIENCE AND FINAL CHECK
 - Depict the actual concept, not a decorative approximation. Check connections,
@@ -68,7 +71,7 @@ REPAIR_ADVICE = {
     "valid_xml": "Return one complete, well-formed <svg> element; close every tag and use only XML-safe entities.",
     "in_viewbox": "Move or resize the named content, including the full text and stroke, inside the viewBox with a 20-unit margin.",
     "title_and_labels": "Add a direct child <title> and at least five separate, visible, non-overlapping <text> labels.",
-    "has_animation": "Add a timed looping opacity <animate> inside a directly visible shape or group.",
+    "has_animation": "Add timed looping SMIL motion to a directly visible shape or group; keep its full path inside the viewBox.",
     "custom_checks": "Put all required terms in visible <text> labels and remove scripts, event handlers and external resources.",
 }
 

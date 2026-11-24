@@ -28,7 +28,7 @@ CONCEPTS = [
             "b² = 16 at (380,410), c² = 25 at (425,245), with separate "
             "'square units' labels below. Label the triangle sides 3 and 4 and "
             "identify the hypotenuse as c = 5 without covering any other label. "
-            "Caption: a² + b² = c² and 9 + 16 = 25. Pulse the squares in sequence."
+            "Caption: a² + b² = c² and 9 + 16 = 25. Animate a small marker back and forth along each triangle side, matching the marker colour to its square. Keep labels stationary."
         ),
     },
     {
@@ -45,7 +45,7 @@ CONCEPTS = [
         "layout_hint": ("Use a circle centred at (260,300), radius 150. Draw the diameter "
                         "from (110,300) to (410,300) and a distinct radius from (260,300) "
                         "to (350,180), which lies on the circumference. Put a colour-coded "
-                        "legend on the right, and pulse the circle and line highlights."),
+                        "legend on the right. Rotate the radius around the centre so its endpoint traces the circumference while its length remains fixed."),
     },
     {
         "id": 3,
@@ -64,8 +64,10 @@ CONCEPTS = [
                         "at y=335 and y=365, each crossing x=200, with the longer plate "
                         "positive. The plates represent the cell, not a broken wire. "
                         "Label cell, current, voltage and both lamps; show conventional "
-                        "current arrows clockwise and Vcell = V1 + V2. Pulse arrows only "
-                        "as highlights, not as a simulation of moving charge."),
+                        "current arrows clockwise and Vcell = V1 + V2. Animate markers "
+                        "around the loop in the conventional current direction, from the "
+                        "positive cell terminal through both lamps. Label them as a schematic, "
+                        "not electrons or a depiction of actual drift speed."),
     },
     {
         "id": 4,
@@ -80,7 +82,8 @@ CONCEPTS = [
         "layout_hint": ("Place a leaf in the centre; arrows from the left carry carbon dioxide "
                         "and water into it, a light-energy arrow points down into the leaf, "
                         "and arrows on the right point outward to glucose and oxygen. Label "
-                        "chlorophyll in the leaf. Pulse the arrows as highlights. Show the "
+                        "chlorophyll in the leaf. Move small markers along the arrows in the "
+                        "correct directions; state that motion is schematic. Show the "
                         "word equation as a simplified summary, without implying light is matter."),
     },
     {
@@ -98,8 +101,10 @@ CONCEPTS = [
                         "particles in the solid; close, irregular particles in the liquid; "
                         "and fewer, widely spaced particles in the gas. Keep all particles "
                         "inside their containers. Label solid vibrations, liquid particles "
-                        "moving past each other and fast gas motion. If particles merely pulse, "
-                        "say the pulse highlights them rather than depicting their paths."),
+                        "moving past each other and fast gas motion. Animate small vibrations "
+                        "in fixed positions for solids, nearby particles sliding past one "
+                        "another in liquids, and faster paths for gas. Keep particles inside "
+                        "their containers and label the motion as a simplified model."),
     },
 ]
 

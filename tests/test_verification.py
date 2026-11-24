@@ -12,11 +12,12 @@ from verification import assess_result, svg_digest
 class TestVerification(unittest.TestCase):
     def test_saved_series_circuit_is_closed_and_reviewed(self):
         result = next(r for r in load_results() if r['id'] == 3)
-        self.assertEqual(result['final_status'], 'pass')
+        self.assertEqual(result['final_status'], 'needs_review')
         self.assertEqual(result['scientific_verification']['status'], 'pass')
         self.assertIn('AI assistant', result['scientific_verification']['method'])
         self.assertIn('M200 335 V255 H290 M350 255 H450 M510 255 H640 V430 H200 V365', result['svg'])
-        self.assertTrue(all(c['passed'] is True for c in result['checks'].values()))
+        self.assertIsNone(result['checks']['animated_bounds']['passed'])
+        self.assertTrue(all(c['passed'] is True for name, c in result['checks'].items() if name != 'animated_bounds'))
 
     def test_passed_automatic_checks_need_scientific_review(self):
         result = assess_result({'svg': GOOD_SVG, 'final_status': 'pass'}, PYTHAGORAS)
@@ -44,11 +45,11 @@ class TestVerification(unittest.TestCase):
         self.assertEqual(result['final_status'], 'needs_review')
         self.assertEqual(result['validation_retries'], 0)
 
-    def test_api_reports_series_pass(self):
+    def test_api_reports_series_needs_motion_review(self):
         with app.test_client() as client:
             response = client.get('/api/results')
         result = next(r for r in response.get_json() if r['id'] == 3)
-        self.assertEqual(result['final_status'], 'pass')
+        self.assertEqual(result['final_status'], 'needs_review')
         self.assertEqual(result['scientific_verification']['status'], 'pass')
 
 
@@ -61,7 +62,7 @@ class TestSavedScientificReviews(unittest.TestCase):
             review = result['scientific_verification']
             self.assertEqual(review['svg_sha256'], svg_digest(result['svg']))
             self.assertTrue(review['reason'])
-            self.assertEqual(result['final_status'], 'pass')
+            self.assertEqual(result['final_status'], 'needs_review')
             self.assertIn('not independent expert or user approval', review['method'])
 
     def test_saved_verdict_is_invalidated_when_svg_changes(self):
