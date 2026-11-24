@@ -51,6 +51,7 @@ The overall outcomes are not the same as scientific review: all five saved SVGs 
 
 ## AI tools used
 Claude: guided troubleshooting and repetitive code writing.
+Arena AI : For checking the edge cases
 
 ## Current issues
 The Current issues panel lists failed automatic checks, recorded scientific-review failures, and live-generation errors for each diagram. It updates after generation, links to the relevant row, and distinguishes diagrams awaiting verification from failures. Live-generation errors remain visible until another attempt for that diagram; they are not persisted.
