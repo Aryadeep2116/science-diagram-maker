@@ -3,23 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#17253c">
   <title>Science Diagram Maker</title>
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>Science Diagram Maker</h1>
-  <p class="sub">Model: {{ model }}. Saved results load without any API call. Decisions are saved in this browser (localStorage).</p>
-  <div id="message" class="message" hidden></div>
-  <div class="wrap">
-    <table>
-      <thead>
-        <tr><th>Concept</th><th>Diagram</th><th>Checks</th><th>Cost and retries</th><th>Review</th></tr>
-      </thead>
-      <tbody id="rows"></tbody>
-    </table>
-  </div>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <a class="brand" href="/" aria-label="Science Diagram Maker home">
+        <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><circle cx="16" cy="16" r="3" fill="currentColor"/><ellipse cx="16" cy="16" rx="13" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(-45 16 16)"/><ellipse cx="16" cy="16" rx="13" ry="5.5" stroke="currentColor" stroke-width="1.5" transform="rotate(45 16 16)"/></svg></span>
+        <span>Science<span class="brand-light"> / </span>Diagram Maker</span>
+      </a>
+      <span class="topbar-meta"><span class="online-dot"></span> REVIEW WORKSPACE</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <div class="page-intro">
+      <div>
+        <div class="eyebrow"><span></span> YOUR DIAGRAM LIBRARY</div>
+        <h1>Ideas, illustrated<span class="heading-dot">.</span></h1>
+        <p>Explore and review animated science diagrams, all in one place.</p>
+      </div>
+      <div class="model-label"><span class="model-icon">✦</span><span><small>GENERATED WITH</small><strong>{{ model }}</strong></span></div>
+    </div>
+
+    <section class="overview" aria-label="Library overview">
+      <div class="overview-title"><span class="overview-icon" aria-hidden="true">◈</span><div><strong>Library overview</strong><span>A snapshot of your diagrams</span></div></div>
+      <div class="overview-stats" id="stats" aria-live="polite"></div>
+    </section>
+
+    <div id="message" class="message" role="alert" hidden></div>
+    <section class="issues-panel" aria-labelledby="issues-heading">
+      <div class="issues-heading"><span class="issue-icon" aria-hidden="true">!</span><div><div class="section-kicker">REVIEW QUEUE</div><h2 id="issues-heading">Current issues</h2></div></div>
+      <p class="issues-intro">Known diagram errors and live generation problems appear here. Automatic checks alone do not confirm scientific accuracy.</p>
+      <div id="issues" aria-live="polite"></div>
+    </section>
+
+    <section class="library" aria-labelledby="library-heading">
+      <div class="library-heading"><div><div class="section-kicker">THE COLLECTION</div><h2 id="library-heading">Your diagrams</h2><p>Inspect each illustration, check its results, and leave a review.</p></div><span class="library-note"><span></span> DIAGRAM COLLECTION</span></div>
+      <table class="diagram-table"><caption class="sr-only">Diagram results, checks, costs, retries and review controls</caption>
+        <thead class="sr-only"><tr><th scope="col">Diagram, checks, costs and review</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </section>
+    <footer><span>Science / Diagram Maker</span><span>Made for curious minds <span aria-hidden="true">✳</span></span></footer>
+  </main>
   <!-- tojson makes the data safe inside a script tag -->
   <script id="data" type="application/json">{{ results|tojson }}</script>
+  <script src="{{ url_for('static', filename='issues.js') }}"></script>
   <script src="{{ url_for('static', filename='app.js') }}"></script>
 </body>
 </html>

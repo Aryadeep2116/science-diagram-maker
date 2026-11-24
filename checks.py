@@ -4,6 +4,7 @@
 # The reason text is also fed back to the model if a retry is needed.
 
 import re                                   # used in Steps 8 and 9 (path and number parsing)
+from svgelements import Matrix, Point, Rect, Circle, Ellipse, SimpleLine, Polygon, Polyline, Path
 import xml.etree.ElementTree as ET          # Python's built-in XML parser
 import config                               # for MIN_TEXT_LABELS
 from svg_utils import parse_viewbox, to_float   # used in Step 8
@@ -38,194 +39,193 @@ def valid_xml(svg_text):
     return True, "SVG parsed correctly."
 
 
-# ---------- Check 2: has a title and at least 3 text labels ----------
+# Elements inside these containers do not render directly.
+NON_RENDERED = {"defs", "symbol", "clipPath", "mask", "pattern", "marker", "metadata", "style", "title", "desc"}
+
+
+def _hidden(element, hidden_selectors=()):
+    style = element.get("style", "").lower().replace(" ", "")
+    css_hidden = any((selector.startswith(".") and selector[1:] in element.get("class", "").split())
+                     or (selector.startswith("#") and selector[1:] == element.get("id"))
+                     or (not selector.startswith((".", "#")) and selector == local_name(element.tag))
+                     for selector in hidden_selectors)
+    return (css_hidden or element.get("display", "").lower() == "none"
+            or element.get("visibility", "").lower() in ("hidden", "collapse")
+            or "display:none" in style or "visibility:hidden" in style
+            or element.get("opacity", "").strip() == "0"
+            or "opacity:0;" in style or style.endswith("opacity:0"))
+
+
+def rendered_elements(root):
+    """Yield directly rendered elements, excluding hidden/non-rendered subtrees.
+
+    CSS selectors and referenced <use> instances need a browser to resolve fully.
+    """
+    hidden_selectors = set()
+    css = "\n".join("".join(e.itertext()) for e in root.iter() if local_name(e.tag) == "style")
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    for selector, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        if re.search(r"(?:^|;)\s*(?:display\s*:\s*none|visibility\s*:\s*(?:hidden|collapse))\s*(?:;|$)", body, re.I):
+            hidden_selectors.update(part.strip() for part in selector.split(",") if re.fullmatch(r"(?:[\w-]+|\.[\w-]+|#[\w-]+)", part.strip()))
+    def visit(element):
+        if local_name(element.tag) in NON_RENDERED or _hidden(element, hidden_selectors):
+            return
+        yield element
+        for child in element:
+            yield from visit(child)
+    return visit(root)
+
+
 def title_and_labels(svg_text):
-    """Pass if there is a non-empty <title> directly inside <svg> and >= 3 non-empty <text> labels."""
+    """Require a direct title and at least MIN_TEXT_LABELS directly rendered labels."""
     root = parse_svg(svg_text)
-
-    title_text = ""
-    for child in root:                             # only direct children of <svg>
-        if local_name(child.tag) == "title":
-            title_text = (child.text or "").strip()
-
-    label_count = 0
-    for element in root.iter():                    # root.iter() visits every element at any depth
-        if local_name(element.tag) == "text":
-            content = "".join(element.itertext()).strip()   # itertext() includes text inside <tspan>
-            if content:                            # empty <text> does not count as a label
-                label_count += 1
-
+    title_text = next(((child.text or "").strip() for child in root
+                       if local_name(child.tag) == "title" and (child.text or "").strip()), "")
+    label_count = sum(1 for element in rendered_elements(root)
+                      if local_name(element.tag) == "text" and "".join(element.itertext()).strip())
     problems = []
     if not title_text:
         problems.append("there is no non-empty <title> directly inside <svg>")
     if label_count < config.MIN_TEXT_LABELS:
-        problems.append(f"there are only {label_count} <text> labels, at least {config.MIN_TEXT_LABELS} are needed")
+        problems.append(f"there are only {label_count} visible <text> labels, at least {config.MIN_TEXT_LABELS} are needed")
     if problems:
         return False, "Problems: " + "; ".join(problems) + "."
-    return True, f"Title found and {label_count} text labels."
+    return True, f"Title found and {label_count} directly rendered text labels."
 
 
 # ---------- Check 3: has at least one animation ----------
-ANIMATION_TAGS = ("animate", "animateTransform", "animateMotion", "set")   # SMIL animation elements
+ANIMATION_TAGS = ("animate", "animateTransform", "animateMotion", "set")
+
+
+def _valid_duration(value):
+    if not value:
+        return False
+    match = re.fullmatch(r"\s*(\d+(?:\.\d+)?|\.\d+)\s*(ms|s|min|h)?\s*", value)
+    return bool(match and float(match.group(1)) > 0)
+
+
+def _smil_changes(element):
+    name = local_name(element.tag)
+    if name not in ANIMATION_TAGS or not _valid_duration(element.get("dur")):
+        return False
+    if name == "animateMotion":
+        return bool(element.get("path", "").strip() or any(local_name(c.tag) == "mpath" and (c.get("href") or c.get("{http://www.w3.org/1999/xlink}href")) for c in element))
+    if not element.get("attributeName"):
+        return False
+    if name == "set":
+        return element.get("to") is not None
+    values = [v.strip() for v in element.get("values", "").split(";") if v.strip()]
+    return (len(set(values)) >= 2 or
+            (element.get("from") is not None and element.get("to") is not None
+             and element.get("from") != element.get("to")) or
+            (element.get("by") not in (None, "", "0")))
 
 
 def has_animation(svg_text):
-    """Pass if the SVG has a SMIL animation element, or CSS @keyframes plus an animation property."""
-    root = parse_svg(svg_text)
-    for element in root.iter():
-        name = local_name(element.tag)
-        if name in ANIMATION_TAGS:
-            return True, f"Found a <{name}> animation."
-        if name == "style":                        # CSS animation lives inside a <style> block
-            css = element.text or ""
-            if "@keyframes" in css and "animation" in css:
-                return True, "Found a CSS @keyframes animation."
-    return False, ("No animation found. Add SMIL elements (<animate>, <animateTransform>, "
-                   "<animateMotion>) or a CSS @keyframes rule used by an animation property.")
+    """Check for a timed SMIL change or a referenced CSS keyframes animation.
 
-
-
-
-# ---------- Check 4: nothing is drawn outside the viewBox ----------
-# We only test STATIC positions. Elements with a transform="..." attribute are skipped
-# (with their children), because evaluating transforms is complicated. Animated
-# movement is also not simulated. Elements inside <defs> etc. are not drawn directly, so skipped.
-SKIP_CONTAINERS = ("defs", "clipPath", "mask", "pattern", "marker", "symbol")
-
-
-def _number(element, name, default=0.0):
-    """Read a numeric attribute. Missing -> default. Unreadable (e.g. '50%') -> None."""
-    raw = element.get(name)
-    if raw is None:
-        return default
-    return to_float(raw)
-
-
-def _points_from_list(text):
-    """Turn '10,20 30,40' into [(10.0, 20.0), (30.0, 40.0)]."""
-    numbers = re.findall(r"-?\d+(?:\.\d+)?", text)
-    values = [float(n) for n in numbers]
-    points = []
-    for i in range(0, len(values) - 1, 2):         # take numbers two at a time
-        points.append((values[i], values[i + 1]))
-    return points
-
-
-def _path_points(d):
-    """Corner points of a simple path that only uses ABSOLUTE M, L, H, V, Z commands.
-
-    Returns None if the path uses anything else (curves, relative commands),
-    meaning 'cannot evaluate, skip it'.
+    This is a structural check, not proof of actual browser playback.
     """
-    for letter in re.findall(r"[A-Za-z]", d):
-        if letter not in "MLHVZ":
-            return None
-    x, y = 0.0, 0.0
-    points = []
-    for command, args in re.findall(r"([MLHVZ])([^MLHVZ]*)", d):
-        numbers = [float(n) for n in re.findall(r"-?\d+(?:\.\d+)?", args)]
-        if command in "ML":                        # move / line: x y pairs
-            for i in range(0, len(numbers) - 1, 2):
-                x, y = numbers[i], numbers[i + 1]
-                points.append((x, y))
-        elif command == "H":                       # horizontal line: only x changes
-            for n in numbers:
-                x = n
-                points.append((x, y))
-        elif command == "V":                       # vertical line: only y changes
-            for n in numbers:
-                y = n
-                points.append((x, y))
-    return points
+    root = parse_svg(svg_text)
+    visible = list(rendered_elements(root))
+    for element in visible:
+        if _smil_changes(element):
+            return True, f"Found a timed <{local_name(element.tag)}> animation."
+    css = "\n".join("".join(e.itertext()) for e in root.iter() if local_name(e.tag) == "style")
+    css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
+    names = set()
+    for match in re.finditer(r"@(?:-webkit-)?keyframes\s+([\w-]+)\s*\{", css, re.I):
+        depth, end = 1, match.end()
+        while end < len(css) and depth:
+            depth += (css[end] == "{") - (css[end] == "}")
+            end += 1
+        frames = re.findall(r"(?:from|to|[\d.]+%)\s*\{([^{}]*)\}", css[match.end():end-1], re.I)
+        if len(frames) >= 2 and len({re.sub(r"\s+", "", frame) for frame in frames}) >= 2:
+            names.add(match.group(1))
+    # A simple selector, referring to a rendered element, must use the keyframe.
+    for selector, body in re.findall(r"([^{}]+)\{([^{}]*)\}", css):
+        if "@" in selector:
+            continue
+        declarations = re.findall(r"(?:^|;)\s*(?:-webkit-)?animation(?:-name)?\s*:\s*([^;]+)", body, re.I)
+        durations = re.findall(r"(?:^|;)\s*(?:-webkit-)?animation-duration\s*:\s*([^;]+)", body, re.I)
+        def active_duration(value):
+            times = re.findall(r"(?<![\w.-])(?:\d+(?:\.\d+)?|\.\d+)\s*(?:ms|s)\b", value, re.I)
+            return bool(times and _valid_duration(times[0].lower()))
+        if not any(re.search(r"(?<![\w-])" + re.escape(name) + r"(?![\w-])", value)
+                   and (active_duration(value) or any(active_duration(duration) for duration in durations))
+                   for value in declarations for name in names):
+            continue
+        for part in selector.split(","):
+            part = part.strip()
+            if not re.fullmatch(r"(?:[\w-]+|\.[\w-]+|\#[\w-]+)", part):
+                continue
+            for element in visible:
+                if (part.startswith(".") and part[1:] in element.get("class", "").split()
+                    or part.startswith("#") and part[1:] == element.get("id")
+                    or not part.startswith((".", "#")) and part == local_name(element.tag)):
+                    return True, "Found a CSS keyframes animation referenced by a rendered element."
+    return False, "No valid timed animation found on a directly rendered element."
 
 
-def _element_points(element):
-    """Extreme points of one element: if these are inside the viewBox, the shape is too."""
+# ---------- Check 4: static geometry against the viewBox ----------
+# SVG text metrics, CSS, references and animation require a browser renderer.
+# This check does not claim to prove those cases are inside the bounds.
+GEOMETRY = {"rect": Rect, "circle": Circle, "ellipse": Ellipse, "line": SimpleLine,
+            "polygon": Polygon, "polyline": Polyline, "path": Path}
+
+
+def _collect_problems(element, bounds, problems, transform=None):
     name = local_name(element.tag)
-
-    if name == "rect":
-        values = [_number(element, "x"), _number(element, "y"),
-                  _number(element, "width"), _number(element, "height")]
-        if None in values:
-            return []
-        x, y, w, h = values
-        return [(x, y), (x + w, y + h)]
-
-    if name == "circle":
-        values = [_number(element, "cx"), _number(element, "cy"), _number(element, "r")]
-        if None in values:
-            return []
-        cx, cy, r = values
-        return [(cx - r, cy - r), (cx + r, cy + r)]
-
-    if name == "ellipse":
-        values = [_number(element, "cx"), _number(element, "cy"),
-                  _number(element, "rx"), _number(element, "ry")]
-        if None in values:
-            return []
-        cx, cy, rx, ry = values
-        return [(cx - rx, cy - ry), (cx + rx, cy + ry)]
-
-    if name == "line":
-        values = [_number(element, "x1"), _number(element, "y1"),
-                  _number(element, "x2"), _number(element, "y2")]
-        if None in values:
-            return []
-        return [(values[0], values[1]), (values[2], values[3])]
-
-    if name in ("polygon", "polyline"):
-        return _points_from_list(element.get("points", ""))
-
-    if name == "text":                             # we check the anchor point only, not text width
-        x, y = _number(element, "x"), _number(element, "y")
-        if x is None or y is None:
-            return []
-        return [(x, y)]
-
-    if name == "path":
-        points = _path_points(element.get("d", ""))
-        return points if points is not None else []
-
-    return []                                      # other elements (g, title, animate...) have no geometry
-
-
-def _collect_problems(element, bounds, problems):
-    """Walk the tree and record every element that reaches outside the bounds."""
-    name = local_name(element.tag)
-    if name in SKIP_CONTAINERS:
+    if name in NON_RENDERED or _hidden(element):
         return
-    if element.get("transform") is not None:       # cannot evaluate: skip this element and its children
+    try:
+        current = Matrix(element.get("transform", ""))
+        if transform is not None:
+            # SVG child coordinates are transformed by the child, then the parent.
+            current *= transform
+        numeric_attrs = {"x", "y", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "width", "height", "stroke-width"}
+        unsupported_units = any(attr in numeric_attrs and to_float(value) is None
+                                for attr, value in element.attrib.items())
+        if name in GEOMETRY and not unsupported_units and not any(local_name(child.tag) == "animateMotion" for child in element):
+            shape = GEOMETRY[name](dict(element.attrib))
+            shape *= current
+            box = shape.bbox(with_stroke=True)
+            if box is not None:
+                left, top, right, bottom = bounds
+                if box[0] < left - 1e-9 or box[1] < top - 1e-9 or box[2] > right + 1e-9 or box[3] > bottom + 1e-9:
+                    problems.append(f"<{name}> reaches bounds ({box[0]:g}, {box[1]:g}, {box[2]:g}, {box[3]:g})")
+        elif name == "text":
+            # The text anchor can be checked, but its rendered extent cannot.
+            x, y = to_float(element.get("x", "0")), to_float(element.get("y", "0"))
+            if x is not None and y is not None:
+                point = Point(x, y) * current
+                left, top, right, bottom = bounds
+                if point.x < left or point.x > right or point.y < top or point.y > bottom:
+                    problems.append(f"<text> anchor reaches ({point.x:g}, {point.y:g})")
+    except (ValueError, TypeError, AttributeError, ZeroDivisionError, OverflowError) as error:
+        problems.append(f"<{name}> geometry could not be evaluated: {error}")
         return
-
-    left, top, right, bottom = bounds
-    for x, y in _element_points(element):
-        if x < left or x > right or y < top or y > bottom:
-            problems.append(f"<{name}> reaches ({x:g}, {y:g})")
-            break                                  # one report per element is enough
-
-    for child in element:                          # now check the children
-        _collect_problems(child, bounds, problems)
+    for child in element:
+        _collect_problems(child, bounds, problems, current)
 
 
 def in_viewbox(svg_text):
-    """Pass if no drawn element extends outside the viewBox."""
+    """Check supported static shape bounds; dynamic/browser-only content needs review."""
     root = parse_svg(svg_text)
     viewbox = parse_viewbox(root.get("viewBox"))
     if viewbox is None:
-        return False, 'The <svg> has no valid viewBox attribute (expected viewBox="0 0 800 600").'
-
+        return False, 'The <svg> has no valid viewBox with finite, positive width and height.'
     min_x, min_y, width, height = viewbox
-    bounds = (min_x, min_y, min_x + width, min_y + height)   # left, top, right, bottom
-
+    bounds = (min_x, min_y, min_x + width, min_y + height)
     problems = []
     _collect_problems(root, bounds, problems)
     if problems:
-        shown = "; ".join(problems[:5])            # keep the message short for the retry prompt
+        shown = "; ".join(problems[:5])
         extra = f" (and {len(problems) - 5} more)" if len(problems) > 5 else ""
-        return False, (f"{len(problems)} element(s) are outside the viewBox "
+        return False, (f"{len(problems)} element(s) are outside or could not be checked against the viewBox "
                        f"{min_x:g} {min_y:g} {width:g} {height:g}: {shown}{extra}.")
-    return True, "Everything is inside the viewBox."
-
+    return True, ("Supported static geometry and text anchors are inside the viewBox. "
+                  "Text extent, CSS, references and animation still require visual review.")
 
 
 # ---------- Check 5 (my own): custom_checks = concept keywords + safety ----------
@@ -241,7 +241,7 @@ def concept_keywords(svg_text, concept):
     """Pass if every required keyword for this concept appears in the <text> labels."""
     root = parse_svg(svg_text)
     pieces = []
-    for element in root.iter():
+    for element in rendered_elements(root):
         if local_name(element.tag) == "text":
             pieces.append("".join(element.itertext()))
     all_text = " ".join(pieces).lower()            # lowercase so matching ignores capitals
@@ -308,6 +308,23 @@ def _pack(result):
     return {"passed": result[0], "reason": result[1]}
 
 
+def _bounds_need_rendering(root):
+    # These constructs or values cannot be bounded reliably by the static shape parser.
+    uncertain = {"text", "use", "image", "foreignObject", "animate", "animateTransform",
+                 "animateMotion", "set", "style", "clipPath", "mask", "pattern", "marker", "filter"}
+    ignored = NON_RENDERED | {"svg", "g", "a", "switch"}
+    for element in root.iter():
+        name = local_name(element.tag)
+        if name in uncertain or (name not in GEOMETRY and name not in ignored):
+            return True
+        if any(local_name(key) in {"style", "class", "filter", "clip-path", "mask", "marker-start", "marker-mid", "marker-end"}
+               or (local_name(key) in {"x", "y", "cx", "cy", "r", "rx", "ry", "x1", "y1", "x2", "y2", "width", "height", "stroke-width"}
+                   and to_float(value) is None)
+               for key, value in element.attrib.items()):
+            return True
+    return False
+
+
 def run_all_checks(svg_text, concept):
     """Run all 5 checks. Returns {check_name: {"passed": bool, "reason": str}}."""
     results = {}
@@ -320,6 +337,13 @@ def run_all_checks(svg_text, concept):
         return results
 
     results["in_viewbox"] = _pack(in_viewbox(svg_text))
+    if results["in_viewbox"]["passed"]:
+        # Geometry that needs a renderer cannot honestly be certified by a static parser.
+        root = parse_svg(svg_text)
+        if _bounds_need_rendering(root):
+            results["in_viewbox"] = {"passed": None, "reason": (
+                "Supported static geometry is inside the viewBox, but some content or units, including text, "
+                "CSS, references or animation, require rendering review before bounds can be verified.")}
     results["title_and_labels"] = _pack(title_and_labels(svg_text))
     results["has_animation"] = _pack(has_animation(svg_text))
     results["custom_checks"] = _pack(custom_checks(svg_text, concept))
@@ -327,10 +351,10 @@ def run_all_checks(svg_text, concept):
 
 
 def failed_checks(results):
-    """List of (check_name, reason) for checks that really failed (skipped ones are not listed)."""
+    """List actual failures; skipped and unverified checks are not failures."""
     failures = []
     for name, outcome in results.items():
-        if not outcome["passed"] and not outcome["reason"].startswith("Skipped"):
+        if outcome["passed"] is False and not outcome["reason"].startswith("Skipped"):
             failures.append((name, outcome["reason"]))
     return failures
 

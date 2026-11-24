@@ -14,6 +14,7 @@ import config
 from concepts import CONCEPTS, get_concept
 from gemini_client import GeminiError
 from pipeline import generate_one
+from verification import assess_result
 
 PREVIEW_FOLDER = "previews"
 
@@ -24,7 +25,8 @@ def load_existing():
         return {}
     with open(config.RESULTS_FILE, encoding="utf-8") as file:
         data = json.load(file)
-    return {item["id"]: item for item in data}
+    return {item["id"]: assess_result(item, get_concept(item["id"]))
+            if get_concept(item["id"]) else item for item in data}
 
 
 def save_results(results_by_id):
@@ -46,14 +48,17 @@ def save_preview(result):
 
 def describe(result):
     """One readable log line for a finished concept."""
-    failed = [name for name, outcome in result["checks"].items() if not outcome["passed"]]
+    failed = [name for name, outcome in result["checks"].items() if outcome["passed"] is False]
     line = (f"  -> {result['final_status'].upper()} | validation retries: {result['validation_retries']} "
             f"| api retries: {result['api_retries']} | tokens: {result['input_tokens']} in / "
             f"{result['output_tokens']} out | est. cost: ${result['cost_usd']} | {result['latency_seconds']}s")
+    line += "\n     checks: " + ", ".join(
+        f"{name}={'PASS' if outcome['passed'] is True else 'FAIL' if outcome['passed'] is False else 'UNVERIFIED'}"
+        for name, outcome in result["checks"].items())
     if failed:
         line += "\n     failed checks: " + ", ".join(failed)
         for name, outcome in result["checks"].items():     # print WHY each check failed
-            if not outcome["passed"]:
+            if outcome["passed"] is False:
                 line += f"\n       {name}: {outcome['reason']}"
     return line
 

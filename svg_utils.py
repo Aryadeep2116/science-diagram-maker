@@ -3,6 +3,7 @@
 
 import html.entities   # table of HTML entity names -> character codes
 import re
+import math
 
 # The only entities XML itself understands. Everything else (&sup2; &nbsp; &times; ...)
 # is HTML-only and makes the XML parser fail.
@@ -62,5 +63,7 @@ def parse_viewbox(viewbox_text):
     try:
         numbers = [float(p) for p in parts]
     except ValueError:
+        return None
+    if not all(math.isfinite(number) for number in numbers) or numbers[2] <= 0 or numbers[3] <= 0:
         return None
     return tuple(numbers)

@@ -24,10 +24,12 @@ GOOD_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600">
 
 class TestChecks(unittest.TestCase):
 
-    def test_good_svg_passes_everything(self):
+    def test_good_svg_passes_static_checks_but_bounds_need_rendering_review(self):
         results = checks.run_all_checks(GOOD_SVG, PYTHAGORAS)
+        self.assertIsNone(results["in_viewbox"]["passed"])
         for name, outcome in results.items():
-            self.assertTrue(outcome["passed"], f"{name} failed: {outcome['reason']}")
+            if name != "in_viewbox":
+                self.assertTrue(outcome["passed"], f"{name} failed: {outcome['reason']}")
 
     def test_broken_xml_fails(self):
         passed, _ = checks.valid_xml("<svg><title>oops</svg>")     # tags do not match
@@ -53,11 +55,10 @@ class TestChecks(unittest.TestCase):
         passed, _ = checks.in_viewbox(bad)
         self.assertFalse(passed)
 
-    def test_transformed_element_is_skipped(self):
-        # Documented limitation: elements with a transform are not evaluated.
+    def test_transformed_element_outside_fails(self):
         skipped = GOOD_SVG.replace('<circle cx="100"', '<circle transform="translate(5,5)" cx="2000"')
         passed, _ = checks.in_viewbox(skipped)
-        self.assertTrue(passed)
+        self.assertFalse(passed)
 
     def test_missing_title_fails(self):
         bad = GOOD_SVG.replace("<title>Pythagoras' theorem</title>", "")

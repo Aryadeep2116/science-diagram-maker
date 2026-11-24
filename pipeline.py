@@ -10,6 +10,7 @@ from gemini_client import call_gemini, GeminiError
 from prompts import build_prompt, build_retry_prompt
 from svg_utils import extract_svg
 from checks import run_all_checks, failed_checks
+from verification import assess_result
 
 
 def estimate_cost(input_tokens, output_tokens):
@@ -65,15 +66,12 @@ def generate_one(concept):
         validation_retries += 1                      # build a retry prompt that names the failures
         prompt = build_retry_prompt(concept, failures)
 
-    final_status = "fail" if failed_checks(checks) else "pass"
-
-    return {
+    result = {
         "id": concept["id"],
         "name": concept["name"],
         "subject": concept["subject"],
         "svg": svg,
         "checks": checks,
-        "final_status": final_status,                # never faked: a failing diagram stays "fail"
         "model": config.GEMINI_MODEL,
         "input_tokens": total_input,
         "output_tokens": total_output,
@@ -84,6 +82,7 @@ def generate_one(concept):
         "note": note,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
     }
+    return assess_result(result, concept)
 
 
 if __name__ == "__main__":
@@ -94,5 +93,6 @@ if __name__ == "__main__":
           "| tokens:", result["input_tokens"], "in /", result["output_tokens"], "out",
           "| cost: $", result["cost_usd"], "|", result["latency_seconds"], "s")
     for name, outcome in result["checks"].items():
-        print(("PASS " if outcome["passed"] else "FAIL ") + name + ": " + outcome["reason"])
+        status = "PASS" if outcome["passed"] is True else "FAIL" if outcome["passed"] is False else "UNVERIFIED"
+        print(status + " " + name + ": " + outcome["reason"])
         
