@@ -76,6 +76,10 @@ def main():
             print(f"     Re-run later with: python generate_all.py {concept_id}")
             continue
 
+        old = results_by_id.get(concept_id)
+        if old and old["final_status"] == "pass" and result["final_status"] == "fail":
+            print("  -> New run failed; keeping the previous PASS result.")
+            continue
         results_by_id[concept_id] = result
         save_results(results_by_id)                            # save immediately
         save_preview(result)
