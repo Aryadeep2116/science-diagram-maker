@@ -131,9 +131,17 @@ function buildRow(r) {
         </div>
       </div>
     </div>
+    <p class="generation-feedback" role="status" aria-live="polite" hidden></p>
     <div class="card-footer"><div class="metrics"><span><strong>$${esc(r.cost_usd)}</strong> estimated cost</span><span><strong>${esc(r.validation_retries)}</strong> validation retries</span><span><strong>${esc(r.api_retries)}</strong> API retries</span><span><strong>${esc(r.input_tokens)} / ${esc(r.output_tokens)}</strong> tokens in / out</span><span><strong>${esc(r.latency_seconds)}s</strong></span><span>${esc(r.model)}</span>${r.note ? `<br>Note: ${esc(r.note)}` : ""}</div>
       <button type="button" class="generate">✦ &nbsp;Generate live</button></div>`;
 
+  const feedback = card.querySelector(".generation-feedback");
+  const previousError = generationErrors.get(r.id);
+  if (previousError) {
+    feedback.textContent = "Generation failed: " + previousError;
+    feedback.hidden = false;
+    feedback.classList.add("error");
+  }
   const approveBtn = card.querySelector(".approve");
   const rejectBtn = card.querySelector(".reject");
   const note = card.querySelector("textarea");
@@ -165,24 +173,44 @@ async function generate(id, button, tr) {
   showMessage("");
   generationErrors.delete(id);
   renderIssues();
+  const feedback = tr.querySelector(".generation-feedback");
+  feedback.hidden = false;
+  feedback.classList.remove("error");
+  feedback.textContent = "Contacting Gemini and checking the diagram. This may take a minute.";
   button.disabled = true;
   tr.querySelectorAll(".approve, .reject, textarea").forEach(control => { control.disabled = true; });
   button.textContent = "Generating…";
   try {
-    const response = await fetch("/api/generate/" + id, { method: "POST" });
+    let response;
+    try {
+      response = await fetch("/api/generate/" + id, { method: "POST" });
+    } catch (error) {
+      throw new Error("Could not reach the server. Check your connection and try again.");
+    }
     let data = null;
     try { data = await response.json(); } catch (e) { /* not JSON (e.g. server timeout) */ }
     if (!response.ok || !data || data.error) {
-      throw new Error((data && data.error) || "The server did not answer properly (it may have timed out). Please try again.");
+      throw new Error((data && data.error) || `The server returned HTTP ${response.status}. It may have timed out; please try again.`);
+    }
+    if (data.id !== id || typeof data.svg !== "string" || !data.checks || typeof data.checks !== "object") {
+      throw new Error("The server returned an incomplete generation result. Please try again.");
     }
     const index = results.findIndex((x) => x.id === id);
+    if (index < 0) throw new Error("The diagram could not be found in this page. Refresh and try again.");
+    const newRow = buildRow(data);
     results[index] = data;                              // browser only: results.json is NOT changed
-    tr.replaceWith(buildRow(data));
+    tr.replaceWith(newRow);
+    const newFeedback = newRow.querySelector(".generation-feedback");
+    newFeedback.textContent = "Generation finished. Check the result and verification status; this result is kept in this page only.";
+    newFeedback.hidden = false;
     renderIssues();
   } catch (error) {
-    generationErrors.set(id, error.message);
+    const errorMessage = error.message || "An unexpected error occurred. Please try again.";
+    generationErrors.set(id, errorMessage);
+    feedback.textContent = "Generation failed: " + errorMessage;
+    feedback.classList.add("error");
     renderIssues();
-    showMessage("Generate failed for concept " + id + ": " + error.message);
+    showMessage("Generate failed for concept " + id + ": " + errorMessage);
     button.disabled = false;
     tr.querySelectorAll(".approve, .reject, textarea").forEach(control => { control.disabled = false; });
     button.textContent = "✦  Generate live";

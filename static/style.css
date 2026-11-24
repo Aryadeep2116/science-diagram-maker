@@ -111,3 +111,8 @@ footer { display: flex; justify-content: space-between; gap: 20px; padding: 38px
 .diagram-table { width: 100%; border-collapse: separate; border-spacing: 0 18px; margin-top: -18px; table-layout: fixed; }
 .diagram-table td { padding: 0; vertical-align: top; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+
+.generation-feedback { margin: 0; padding: 10px 24px; background: #eef3fa; color: #405d7c; font-size: 12px; line-height: 1.5; }
+.generation-feedback.error { background: #fff0ee; color: #943a32; }
+.generation-feedback[hidden] { display: none; }
+@media (max-width: 560px) { .generation-feedback { padding-left: 16px; padding-right: 16px; } }
