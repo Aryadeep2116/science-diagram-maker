@@ -8,7 +8,6 @@ import config
 
 def build_prompt(concept):
     """Make the first-attempt prompt for one concept."""
-    # Each line is one clear rule; models follow short explicit rules better.
     prompt = f"""You are an expert science teacher and SVG artist.
 Create ONE animated SVG diagram for UK GCSE students about this concept.
 
@@ -34,8 +33,9 @@ STRICT RULES:
     draw NOTHING else in that band.
 12. Never place two text labels on top of each other; leave at least 20 units between labels,
     and keep the bottom 80 units free for a formula caption only.
+13. Never use HTML entities such as &nbsp; &sup2; &times;. Type the characters directly
+    (², ×) or use numeric references. Only &amp; &lt; &gt; are allowed.
 """
-    # Some concepts (only Pythagoras) carry exact coordinates; add them if present.
     hint = concept.get("layout_hint")
     if hint:
         prompt += "\nFIXED LAYOUT (copy these coordinates exactly):\n" + hint + "\n"
@@ -43,14 +43,10 @@ STRICT RULES:
 
 
 def build_retry_prompt(concept, failures):
-    """Make the retry prompt.
+    """Make the retry prompt, naming exactly which checks failed and why."""
+    base = build_prompt(concept)
 
-    failures is a list of (check_name, reason) pairs for the checks that failed.
-    We append them so the model knows exactly what to fix.
-    """
-    base = build_prompt(concept)              # start with the original instructions (and layout hint)
-
-    problem_lines = []                        # collect one line per failed check
+    problem_lines = []
     for check_name, reason in failures:
         problem_lines.append(f"- {check_name}: {reason}")
     problems = "\n".join(problem_lines)

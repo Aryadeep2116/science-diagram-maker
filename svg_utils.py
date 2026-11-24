@@ -1,7 +1,25 @@
 # svg_utils.py
 # Small helpers used by the checks: clean the model's raw text and read numbers.
 
+import html.entities   # table of HTML entity names -> character codes
 import re
+
+# The only entities XML itself understands. Everything else (&sup2; &nbsp; &times; ...)
+# is HTML-only and makes the XML parser fail.
+XML_ENTITIES = ("amp", "lt", "gt", "quot", "apos")
+
+
+def fix_entities(text):
+    """Replace HTML-only entities like &sup2; with the real character (²)."""
+    def replace(match):
+        name = match.group(1)
+        if name in XML_ENTITIES:                       # keep valid XML entities untouched
+            return match.group(0)
+        codepoint = html.entities.name2codepoint.get(name)
+        if codepoint is None:                          # unknown name: leave it, the check will report it
+            return match.group(0)
+        return chr(codepoint)
+    return re.sub(r"&([A-Za-z][A-Za-z0-9]*);", replace, text)
 
 
 def extract_svg(raw_text):
@@ -9,12 +27,13 @@ def extract_svg(raw_text):
 
     Models often wrap SVG in ```svg fences or add chatter before/after it,
     so we cut everything outside the first <svg and the last </svg>.
+    Then we convert HTML-only entities so the XML parser accepts the text.
     """
     start = raw_text.find("<svg")
     end = raw_text.rfind("</svg>")
     if start == -1 or end == -1 or end < start:    # no complete svg found
         return None
-    return raw_text[start:end + len("</svg>")]
+    return fix_entities(raw_text[start:end + len("</svg>")])
 
 
 def to_float(value, default=None):

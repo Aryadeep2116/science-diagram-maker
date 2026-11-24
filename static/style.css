@@ -1,0 +1,19 @@
+body { font-family: system-ui, sans-serif; margin: 20px; background: #f6f7f9; color: #1d2433; }
+h1 { margin-bottom: 4px; }
+.sub { color: #556; margin-top: 0; }
+.wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; background: #fff; }
+th, td { border: 1px solid #dde; padding: 10px; vertical-align: top; text-align: left; }
+th { background: #eef1f6; }
+img.diagram { width: 360px; max-width: 100%; border: 1px solid #ccd; background: #fff; }
+.badge { display: block; margin: 3px 0; padding: 3px 8px; border-radius: 10px; font-size: 13px; }
+.pass { background: #d9f5e1; color: #14632a; }
+.fail { background: #fde0e0; color: #8a1c1c; }
+.reason { font-size: 11px; color: #667; margin: 0 0 6px 4px; }
+.small { font-size: 13px; line-height: 1.6; }
+button { padding: 6px 12px; margin: 2px 4px 2px 0; border: 1px solid #99a; border-radius: 6px; cursor: pointer; background: #fff; }
+button.approve.on { background: #2e9e4f; color: #fff; }
+button.reject.on { background: #c0392b; color: #fff; }
+button:disabled { opacity: 0.6; cursor: wait; }
+textarea { width: 100%; box-sizing: border-box; margin-top: 6px; min-height: 60px; }
+.message { background: #fde0e0; color: #8a1c1c; padding: 10px; border-radius: 6px; margin: 10px 0; }

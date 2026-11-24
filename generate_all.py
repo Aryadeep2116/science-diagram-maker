@@ -3,6 +3,7 @@
 #   python generate_all.py        -> all 5 concepts
 #   python generate_all.py 3 5    -> only concepts 3 and 5 (merged into the existing file)
 # results.json is saved after EVERY concept, so a rate-limit error never loses finished work.
+# A failed new run never overwrites an older PASS.
 
 import json
 import os
@@ -51,6 +52,9 @@ def describe(result):
             f"{result['output_tokens']} out | est. cost: ${result['cost_usd']} | {result['latency_seconds']}s")
     if failed:
         line += "\n     failed checks: " + ", ".join(failed)
+        for name, outcome in result["checks"].items():     # print WHY each check failed
+            if not outcome["passed"]:
+                line += f"\n       {name}: {outcome['reason']}"
     return line
 
 
@@ -76,14 +80,17 @@ def main():
             print(f"     Re-run later with: python generate_all.py {concept_id}")
             continue
 
+        print(describe(result))                                # always show what happened
+
+        # Never let a failed new run replace an older PASS.
         old = results_by_id.get(concept_id)
         if old and old["final_status"] == "pass" and result["final_status"] == "fail":
             print("  -> New run failed; keeping the previous PASS result.")
             continue
+
         results_by_id[concept_id] = result
         save_results(results_by_id)                            # save immediately
         save_preview(result)
-        print(describe(result))
 
         if position < len(wanted_ids) - 1:                     # pause to respect free-tier limits
             time.sleep(config.PAUSE_BETWEEN_CONCEPTS_SECONDS)
