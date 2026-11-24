@@ -3,6 +3,7 @@
 # retry once with feedback if a check failed, and log tokens, cost and retries.
 
 import time
+import math
 from datetime import datetime, timezone
 
 import config
@@ -13,11 +14,21 @@ from checks import run_all_checks, failed_checks
 from verification import assess_result
 
 
-def estimate_cost(input_tokens, output_tokens):
+def estimate_cost(input_tokens, output_tokens, model=None, round_output=True):
     """Estimated USD cost, using the editable prices in config.py."""
-    cost = (input_tokens * config.PRICE_PER_MILLION_INPUT_USD
-            + output_tokens * config.PRICE_PER_MILLION_OUTPUT_USD) / 1_000_000
-    return round(cost, 6)
+    if model and model != config.GEMINI_MODEL:
+        try:
+            input_price = float(config.FALLBACK_INPUT_PRICE)
+            output_price = float(config.FALLBACK_OUTPUT_PRICE)
+            if not all(math.isfinite(p) and p >= 0 for p in (input_price, output_price)):
+                return None
+        except (TypeError, ValueError):
+            return None
+    else:
+        input_price = config.PRICE_PER_MILLION_INPUT_USD
+        output_price = config.PRICE_PER_MILLION_OUTPUT_USD
+    cost = (input_tokens * input_price + output_tokens * output_price) / 1_000_000
+    return round(cost, 6) if round_output else cost
 
 
 def generate_one(concept):
@@ -33,6 +44,8 @@ def generate_one(concept):
     total_output = 0
     api_retries = 0
     validation_retries = 0
+    attempt_models = []
+    total_cost = 0.0
     note = ""                                        # extra message if something went wrong on the retry
 
     prompt = build_prompt(concept)                   # first attempt uses the normal prompt
@@ -52,6 +65,13 @@ def generate_one(concept):
         total_input += reply["input_tokens"]
         total_output += reply["output_tokens"]
         api_retries += reply["api_retries"]
+        attempt_model = reply.get("model", config.GEMINI_MODEL)
+        attempt_models.append(attempt_model)
+        attempt_cost = estimate_cost(reply["input_tokens"], reply["output_tokens"], attempt_model, round_output=False)
+        if total_cost is not None:
+            total_cost = None if attempt_cost is None else total_cost + attempt_cost
+        if reply.get("fallback_from"):
+            note = f"Primary model unavailable; used fallback {attempt_model}."
 
         # Clean the reply and run every check.
         svg = extract_svg(reply["text"]) or ""
@@ -72,10 +92,11 @@ def generate_one(concept):
         "subject": concept["subject"],
         "svg": svg,
         "checks": checks,
-        "model": config.GEMINI_MODEL,
+        "model": attempt_models[-1] if attempt_models else config.GEMINI_MODEL,
+        "attempt_models": attempt_models,
         "input_tokens": total_input,
         "output_tokens": total_output,
-        "cost_usd": estimate_cost(total_input, total_output),
+        "cost_usd": round(total_cost, 6) if total_cost is not None else None,
         "validation_retries": validation_retries,
         "api_retries": api_retries,
         "latency_seconds": round(time.time() - start_time, 1),

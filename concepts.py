@@ -15,6 +15,7 @@ CONCEPTS = [
             "other two sides: a² + b² = c²."
         ),
         "keywords": ["hypotenuse"],
+        "review_hint": "Show a right angle and three squares on the corresponding sides. Use square units for all areas, and avoid overlapping labels.",
         "layout_hint": (
             "Use EXACTLY these polygons (a 3-4-5 right triangle, no transforms):\n"
             "- Triangle: points=\"320,290 320,380 440,380\" (right angle at 320,380)\n"
@@ -28,9 +29,9 @@ CONCEPTS = [
             "\nREQUIRED ANIMATION: one looping story, 9 seconds, repeatCount=\"indefinite\", "
             "using SMIL <animate>. Every shape and label must stay visible at the end of each loop.\n"
             "1. 0s-2s: the square on side a fades in (fill-opacity 0.1 to 0.8) and the label "
-            "'a² = 9 units' appears at (250,330).\n"
-            "2. 2s-4s: the square on side b does the same, with the label 'b² = 16 units' at (380,480).\n"
-            "3. 4s-6s: the square on the hypotenuse fades in and the label 'c² = 25 units' appears at (470,230).\n"
+            "'a² = 9 square units' appears at (250,330).\n"
+            "2. 2s-4s: the square on side b does the same, with the label 'b² = 16 square units' at (380,480).\n"
+            "3. 4s-6s: the square on the hypotenuse fades in and the label 'c² = 25 square units' appears at (470,230).\n"
             "4. 6s-8s: the three squares pulse together (stroke-width 2 to 5 and back) while the formula "
             "'a² + b² = c²' fades in.\n"
             "5. 8s-9s: hold, then restart.\n"
@@ -47,6 +48,7 @@ CONCEPTS = [
             "The circumference is the distance around the circle."
         ),
         "keywords": ["centre", "radius", "diameter", "circumference"],
+        "review_hint": "Draw a radius from the centre to the edge and a diameter across the centre equal to twice the radius; distinguish the circumference.",
     },
     {
         "id": 3,
@@ -57,6 +59,7 @@ CONCEPTS = [
             "in the loop. The voltage of the cell is shared between the components."
         ),
         "keywords": ["cell", "current", "voltage"],
+        "review_hint": "Draw a single closed loop with the cell and two lamps electrically connected in series. Every wire must meet a component terminal; never leave a gap. Show the same current and the shared voltage.",
     },
     {
         "id": 4,
@@ -67,6 +70,7 @@ CONCEPTS = [
             "chlorophyll, to make glucose and oxygen."
         ),
         "keywords": ["chlorophyll", "glucose", "oxygen", "carbon dioxide"],
+        "review_hint": "Show water and carbon dioxide entering the leaf, light absorbed by chlorophyll, and glucose and oxygen as products; use clear arrows.",
     },
     {
         "id": 5,
@@ -78,6 +82,7 @@ CONCEPTS = [
             "In a gas they are far apart and move fast."
         ),
         "keywords": ["solid", "liquid", "gas"],
+        "review_hint": "Show closely packed solid particles vibrating, closely packed liquid particles moving past each other, and widely spaced fast gas particles within their containers.",
     },
 ]
 

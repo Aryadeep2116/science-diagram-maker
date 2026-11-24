@@ -51,7 +51,8 @@ def describe(result):
     failed = [name for name, outcome in result["checks"].items() if outcome["passed"] is False]
     line = (f"  -> {result['final_status'].upper()} | validation retries: {result['validation_retries']} "
             f"| api retries: {result['api_retries']} | tokens: {result['input_tokens']} in / "
-            f"{result['output_tokens']} out | est. cost: ${result['cost_usd']} | {result['latency_seconds']}s")
+            f"{result['output_tokens']} out | est. cost: "
+            f"{'$' + str(result['cost_usd']) if result['cost_usd'] is not None else 'unavailable'} | {result['latency_seconds']}s")
     line += "\n     checks: " + ", ".join(
         f"{name}={'PASS' if outcome['passed'] is True else 'FAIL' if outcome['passed'] is False else 'UNVERIFIED'}"
         for name, outcome in result["checks"].items())

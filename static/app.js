@@ -3,17 +3,53 @@
 
 const CHECKS = [
   ["valid_xml", "Valid XML"],
-  ["in_viewbox", "Inside viewBox"],
+  ["in_viewbox", "Static viewBox bounds"],
+  ["animated_bounds", "Animated bounds"],
   ["title_and_labels", "Title + 3 labels"],
   ["has_animation", "Animation"],
   ["custom_checks", "Keywords + safe (mine)"],
 ];
 
-let results = JSON.parse(document.getElementById("data").textContent);
+const savedResults = JSON.parse(document.getElementById("data").textContent);
+// A generated result is saved only in this browser, never on the server.
+const liveIds = new Set();
+let results = savedResults.map(saved => {
+  try {
+    const live = JSON.parse(localStorage.getItem("live-result:" + saved.id));
+    if (live && live.id === saved.id && typeof live.svg === "string" && live.checks && live.final_status) {
+      liveIds.add(saved.id);
+      return { ...live,
+        checks: Object.fromEntries(CHECKS.map(([key]) => [key, {passed: null, reason: "Rechecking browser-saved SVG…"}])),
+        final_status: "needs_review",
+        scientific_verification: {status: "unverified", reason: "Scientific review required for this SVG."},
+      };
+    }
+  } catch (e) { /* Storage may be unavailable or corrupted. */ }
+  return saved;
+});
 const rowsEl = document.getElementById("rows");
 const messageEl = document.getElementById("message");
 const issuesEl = document.getElementById("issues");
 const generationErrors = new Map();
+
+// Configuration status does not make a Gemini request or guarantee quota.
+async function refreshStatus() {
+  const target = document.getElementById("connection-status");
+  target.textContent = "Checking server configuration…";
+  try {
+    const response = await fetch("/api/status");
+    if (!response.ok) throw new Error();
+    const status = await response.json();
+    const key = status.key_configured ? "API key configured" : "API key missing on server";
+    const fallback = status.fallback_model ? ` · Fallback: ${status.fallback_model}` : " · No fallback configured";
+    const worker = status.busy ? " · Generation in progress" : status.cooldown_seconds ? ` · Cooldown: ${status.cooldown_seconds}s` : "";
+    target.textContent = `${key} · Primary: ${status.primary_model}${fallback}${worker}. Gemini quota has not been checked.`;
+  } catch (error) {
+    target.textContent = "Could not check server status. Try refreshing or check your connection.";
+  }
+}
+document.getElementById("refresh-status").onclick = refreshStatus;
+refreshStatus();
 
 // Escape text before putting it in HTML.
 function esc(text) {
@@ -36,9 +72,15 @@ function loadReview(result) {
   catch (e) { return {}; }
 }
 function saveReview(result, review) {
-  try { localStorage.setItem("review:" + result.id, JSON.stringify({ ...review, svg: result.svg })); }
-  catch (e) { showMessage("Could not save your decision in this browser."); }
+  try { localStorage.setItem("review:" + result.id, JSON.stringify({ ...review, svg: result.svg })); return true; }
+  catch (e) { showMessage("Could not save your decision in this browser."); return false; }
 }
+function saveLiveResult(result) {
+  liveIds.add(result.id); // still allow restoring the saved diagram if storage is unavailable
+  try { localStorage.setItem("live-result:" + result.id, JSON.stringify(result)); return true; }
+  catch (e) { showMessage("The live result could not be saved in this browser; it will be lost on refresh."); return false; }
+}
+function displayResult(result) { return withBrowserReview(result, loadReview(result)); }
 
 function showMessage(text) {
   messageEl.textContent = text;
@@ -50,7 +92,8 @@ function renderIssues() {
   issuesEl.replaceChildren();
   let affected = 0;
   let pending = 0;
-  for (const result of results) {
+  for (const rawResult of results) {
+    const result = displayResult(rawResult);
     const issues = collectIssues(result, CHECKS, generationErrors.get(result.id));
     if (!result.scientific_verification || result.scientific_verification.status === "unverified" || Object.values(result.checks || {}).some(check => check.passed === null)) pending++;
     if (!issues.length) continue;
@@ -78,7 +121,7 @@ function renderIssues() {
   if (pending) summary.textContent += ` ${pending} diagram${pending === 1 ? " is" : "s are"} awaiting verification.`;
   issuesEl.prepend(summary);
   const stats = document.getElementById("stats");
-  const count = status => results.filter(result => result.final_status === status).length;
+  const count = status => results.filter(result => displayResult(result).final_status === status).length;
   stats.innerHTML = [
     [results.length, "Diagrams", ""],
     [count("pass"), "Passed", "pass-stat"],
@@ -87,8 +130,9 @@ function renderIssues() {
   ].map(([value, label, cls]) => `<div class="stat ${cls}"><strong>${value}</strong><span>${label}</span></div>`).join("");
 }
 
-function buildRow(r) {
-  const review = loadReview(r);
+function buildRow(raw) {
+  const review = loadReview(raw);
+  const r = displayResult(raw);
   const card = document.createElement("article");
   card.className = "diagram-card";
   card.dataset.id = r.id;
@@ -102,7 +146,7 @@ function buildRow(r) {
     const unverified = c.passed === null;
     const state = skipped || unverified ? "unverified" : c.passed ? "pass" : "fail";
     const name = skipped ? "SKIPPED" : unverified ? "UNVERIFIED" : c.passed ? "PASS" : "FAIL";
-    return `<div class="check-item"><div class="check-top"><span>${esc(label)}</span><span class="status-pill ${state}">${name}</span></div><p class="reason">${esc(c.reason)}</p></div>`;
+    return `<div class="check-item" data-check="${esc(key)}"><div class="check-top"><span>${esc(label)}</span><span class="status-pill ${state}">${name}</span></div><p class="reason">${esc(c.reason)}</p></div>`;
   }).join("");
 
   const verification = r.scientific_verification || { status: "unverified", reason: "Scientific review required." };
@@ -124,16 +168,16 @@ function buildRow(r) {
           <p class="reason">${esc(verification.reason)}</p>${verification.method ? `<p class="method">Review method: ${esc(verification.method)}</p>` : ""}
         </div>
         <details class="check-details"><summary><span>Automatic checks</span><span class="check-summary-right">${passedChecks} / ${CHECKS.length} passed</span></summary><div class="check-list">${checks}</div></details>
-        <div class="review-section"><div class="review-heading"><strong>Your review</strong><span class="review-state">Browser decision: ${esc(review.decision || "not reviewed")}</span></div>
-          <div class="review-actions"><button type="button" class="approve ${review.decision === "approved" ? "on" : ""}" aria-pressed="${review.decision === "approved"}">✓ &nbsp;Approve</button><button type="button" class="reject ${review.decision === "rejected" ? "on" : ""}" aria-pressed="${review.decision === "rejected"}">× &nbsp;Reject</button></div>
+        <div class="review-section"><div class="review-heading"><strong>Your review</strong><span class="review-state">Browser review: ${esc(review.decision || "not reviewed")}${review.reviewedAt ? " · " + esc(review.reviewedAt) : ""}</span></div>
+          <div class="review-actions"><button type="button" class="approve ${review.decision === "approved" ? "on" : ""}" aria-pressed="${review.decision === "approved"}">✓ &nbsp;Verify &amp; approve</button><button type="button" class="reject ${review.decision === "rejected" ? "on" : ""}" aria-pressed="${review.decision === "rejected"}">× &nbsp;Verify &amp; reject</button></div>
           <textarea aria-label="Reviewer note for ${esc(r.name)}" placeholder="Add a reviewer note…">${esc(review.note || "")}</textarea>
-          <p class="review-note">Saved in this browser for this diagram; separate from scientific verification.</p>
+          <p class="review-note">Explicit scientific review is stored only in this browser for this exact SVG. It cannot override failed or unverified automatic checks.</p>
         </div>
       </div>
     </div>
     <p class="generation-feedback" role="status" aria-live="polite" hidden></p>
-    <div class="card-footer"><div class="metrics"><span><strong>$${esc(r.cost_usd)}</strong> estimated cost</span><span><strong>${esc(r.validation_retries)}</strong> validation retries</span><span><strong>${esc(r.api_retries)}</strong> API retries</span><span><strong>${esc(r.input_tokens)} / ${esc(r.output_tokens)}</strong> tokens in / out</span><span><strong>${esc(r.latency_seconds)}s</strong></span><span>${esc(r.model)}</span>${r.note ? `<br>Note: ${esc(r.note)}` : ""}</div>
-      <button type="button" class="generate">✦ &nbsp;Generate live</button></div>`;
+    <div class="card-footer"><div class="metrics"><span><strong>${r.cost_usd == null ? "Unavailable" : "$" + esc(r.cost_usd)}</strong> estimated cost</span><span><strong>${esc(r.validation_retries)}</strong> validation retries</span><span><strong>${esc(r.api_retries)}</strong> API retries</span><span><strong>${esc(r.input_tokens)} / ${esc(r.output_tokens)}</strong> tokens in / out</span><span><strong>${esc(r.latency_seconds)}s</strong></span><span>${esc(r.model)}</span>${r.note ? `<br>Note: ${esc(r.note)}` : ""}</div>
+      <div class="generation-actions">${liveIds.has(r.id) ? '<button type="button" class="restore-saved">Restore saved diagram</button>' : ''}<button type="button" class="generate">✦ &nbsp;Generate live</button></div></div>`;
 
   const feedback = card.querySelector(".generation-feedback");
   const previousError = generationErrors.get(r.id);
@@ -145,13 +189,15 @@ function buildRow(r) {
   const approveBtn = card.querySelector(".approve");
   const rejectBtn = card.querySelector(".reject");
   const note = card.querySelector("textarea");
-  approveBtn.onclick = () => setDecision(r, card.closest("tr"), "approved");
-  rejectBtn.onclick = () => setDecision(r, card.closest("tr"), "rejected");
+  approveBtn.onclick = () => setDecision(raw, card.closest("tr"), "approved");
+  rejectBtn.onclick = () => setDecision(raw, card.closest("tr"), "rejected");
   note.oninput = () => {
-    const current = loadReview(r);
+    const current = loadReview(raw);
     current.note = note.value;
-    saveReview(r, current);
+    saveReview(raw, current);
   };
+  const restore = card.querySelector(".restore-saved");
+  if (restore) restore.onclick = () => restoreSaved(raw.id, card.closest("tr"));
   card.querySelector(".generate").onclick = (event) => generate(r.id, event.currentTarget, card.closest("tr"));
   const row = document.createElement("tr");
   row.id = "diagram-" + r.id;
@@ -162,11 +208,78 @@ function buildRow(r) {
 }
 
 function setDecision(r, tr, decision) {
+  const question = decision === "approved"
+    ? "Record that you personally reviewed the science in this exact diagram? This browser-only verdict cannot override automatic failures or unverified bounds."
+    : "Record that this exact diagram failed your scientific review? This verdict is stored in this browser only.";
+  if (!window.confirm(question)) return;
   const review = loadReview(r);
   review.decision = decision;
-  review.note = tr.querySelector("textarea").value;   // keep whatever is typed
-  saveReview(r, review);
-  tr.replaceWith(buildRow(r));                         // redraw so the buttons update
+  review.scientificStatus = decision === "approved" ? "pass" : "fail";
+  review.reviewedAt = new Date().toISOString();
+  review.note = tr.querySelector("textarea").value;
+  if (!saveReview(r, review)) return;
+  tr.replaceWith(buildRow(r));
+  renderIssues();
+}
+
+// Re-run server checks before trusting locally cached live results after refresh.
+async function recheckSavedLiveResults() {
+  for (const id of liveIds) {
+    const index = results.findIndex(result => result.id === id);
+    if (index < 0) continue;
+    const current = results[index];
+    try {
+      const response = await fetch(`/api/check/${id}`, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({svg: current.svg}),
+      });
+      const checked = await response.json();
+      if (!response.ok || !checked.checks || !checked.scientific_verification) throw new Error();
+      if (!liveIds.has(id) || results[index].svg !== current.svg) continue;
+      results[index] = { ...current, checks: checked.checks, final_status: checked.final_status,
+                         scientific_verification: checked.scientific_verification };
+      saveLiveResult(results[index]);
+    } catch (e) {
+      if (!liveIds.has(id) || results[index].svg !== current.svg) continue;
+      results[index] = { ...current, checks: Object.fromEntries(CHECKS.map(([key]) =>
+        [key, {passed: null, reason: "Could not recheck this browser-saved diagram. Retry after reconnecting."}])) };
+    }
+    const row = document.getElementById("diagram-" + id);
+    if (row && !row.querySelector(".generate:disabled")) row.replaceWith(buildRow(results[index]));
+    renderIssues();
+    inspectAnimation(results[index]);
+  }
+}
+
+// Browser samples are advisory, never a proof of all animation frames.
+async function inspectAnimation(result) {
+  if (!result.checks || !result.checks.animated_bounds || result.checks.animated_bounds.passed !== null ||
+      !result.checks.custom_checks || result.checks.custom_checks.passed !== true) return;
+  const reason = await sampleAnimatedBounds(result.svg);
+  const index = results.findIndex(item => item.id === result.id);
+  if (index < 0 || results[index].svg !== result.svg || !results[index].checks.animated_bounds ||
+      results[index].checks.animated_bounds.passed !== null) return;
+  results[index] = { ...results[index], checks: { ...results[index].checks,
+    animated_bounds: { passed: null, reason } } };
+  const row = document.getElementById("diagram-" + result.id);
+  if (row) {
+    const reasonEl = row.querySelector('[data-check="animated_bounds"] .reason');
+    if (reasonEl) reasonEl.textContent = reason;
+  }
+}
+
+function restoreSaved(id, row) {
+  const saved = savedResults.find(result => result.id === id);
+  if (!saved) return;
+  try { localStorage.removeItem("live-result:" + id); }
+  catch (e) { showMessage("Could not remove the locally saved generation."); return; }
+  liveIds.delete(id);
+  generationErrors.delete(id);
+  const index = results.findIndex(result => result.id === id);
+  results[index] = saved;
+  row.replaceWith(buildRow(saved));
+  renderIssues();
+  inspectAnimation(saved);
 }
 
 async function generate(id, button, tr) {
@@ -178,7 +291,7 @@ async function generate(id, button, tr) {
   feedback.classList.remove("error");
   feedback.textContent = "Contacting Gemini and checking the diagram. This may take a minute.";
   button.disabled = true;
-  tr.querySelectorAll(".approve, .reject, textarea").forEach(control => { control.disabled = true; });
+  tr.querySelectorAll(".approve, .reject, .restore-saved, textarea").forEach(control => { control.disabled = true; });
   button.textContent = "Generating…";
   try {
     let response;
@@ -197,13 +310,15 @@ async function generate(id, button, tr) {
     }
     const index = results.findIndex((x) => x.id === id);
     if (index < 0) throw new Error("The diagram could not be found in this page. Refresh and try again.");
+    const persisted = saveLiveResult(data);
     const newRow = buildRow(data);
     results[index] = data;                              // browser only: results.json is NOT changed
     tr.replaceWith(newRow);
     const newFeedback = newRow.querySelector(".generation-feedback");
-    newFeedback.textContent = "Generation finished. Check the result and verification status; this result is kept in this page only.";
+    newFeedback.textContent = persisted ? "Generation finished. This result is saved only in this browser. Review its science and checks." : "Generation finished. Browser storage is unavailable; this result will be lost on refresh.";
     newFeedback.hidden = false;
     renderIssues();
+    inspectAnimation(data);
   } catch (error) {
     const errorMessage = error.message || "An unexpected error occurred. Please try again.";
     generationErrors.set(id, errorMessage);
@@ -211,14 +326,22 @@ async function generate(id, button, tr) {
     feedback.classList.add("error");
     renderIssues();
     showMessage("Generate failed for concept " + id + ": " + errorMessage);
-    button.disabled = false;
-    tr.querySelectorAll(".approve, .reject, textarea").forEach(control => { control.disabled = false; });
-    button.textContent = "✦  Generate live";
+    const index = results.findIndex(item => item.id === id);
+    if (index >= 0) tr.replaceWith(buildRow(results[index]));
+    else {
+      button.disabled = false;
+      tr.querySelectorAll(".approve, .reject, .restore-saved, textarea").forEach(control => { control.disabled = false; });
+      button.textContent = "✦  Generate live";
+    }
+  } finally {
+    refreshStatus();
   }
 }
 
 results.forEach((r) => rowsEl.appendChild(buildRow(r)));
 renderIssues();
+results.filter(r => !liveIds.has(r.id)).forEach(inspectAnimation);
+recheckSavedLiveResults();
 if (results.length === 0) showMessage("No saved results found. Run python generate_all.py first.");
 
 

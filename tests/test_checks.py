@@ -26,9 +26,10 @@ class TestChecks(unittest.TestCase):
 
     def test_good_svg_passes_static_checks_but_bounds_need_rendering_review(self):
         results = checks.run_all_checks(GOOD_SVG, PYTHAGORAS)
-        self.assertIsNone(results["in_viewbox"]["passed"])
+        self.assertTrue(results["in_viewbox"]["passed"])
+        self.assertIsNone(results["animated_bounds"]["passed"])
         for name, outcome in results.items():
-            if name != "in_viewbox":
+            if name != "animated_bounds":
                 self.assertTrue(outcome["passed"], f"{name} failed: {outcome['reason']}")
 
     def test_broken_xml_fails(self):

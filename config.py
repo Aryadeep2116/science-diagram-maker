@@ -13,6 +13,8 @@ GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
 
 # Model name; can be overridden with the GEMINI_MODEL environment variable.
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.5-flash-lite")
+# Optional: a different model available to the same project. No automatic default.
+GEMINI_FALLBACK_MODEL = os.environ.get("GEMINI_FALLBACK_MODEL", "").strip()
 
 # The REST endpoint we call (built from the model name).
 GEMINI_URL = (
@@ -33,6 +35,9 @@ MAX_OUTPUT_TOKENS = 8192
 # we show the estimated paid-tier cost so cost tracking is meaningful.
 PRICE_PER_MILLION_INPUT_USD = 0.10
 PRICE_PER_MILLION_OUTPUT_USD = 0.40
+# Fallback pricing must be configured separately; unknown prices are not guessed.
+FALLBACK_INPUT_PRICE = os.environ.get("GEMINI_FALLBACK_INPUT_PRICE")
+FALLBACK_OUTPUT_PRICE = os.environ.get("GEMINI_FALLBACK_OUTPUT_PRICE")
 
 # ---------- Retry settings ----------
 # API errors (429 rate limit / 503 overloaded): wait and try again, up to 3 times.
