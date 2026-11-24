@@ -1,0 +1,41 @@
+# Science Diagram Maker
+
+Asks Gemini for 5 animated SVG science diagrams, checks each in code, and lets a reviewer approve or reject them.
+Live app: <https://science-diagram-maker-ahg7.onrender.com>
+
+## Run locally
+1. `python -m venv venv` then `venv\Scripts\activate` (Windows) or `source venv/bin/activate`
+2. `pip install -r requirements.txt`
+3. Copy `.env.example` to `.env` and set `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`)
+4. `python generate_all.py` regenerates `results.json` (`python generate_all.py 3` for one concept)
+5. `python app.py` then open http://127.0.0.1:5000
+6. `python -m unittest -v` runs the check tests (no API needed)
+
+
+Model: gemini-3.5-flash-lite. Costs are ESTIMATES from editable prices in `config.py`; the free tier actually costs $0.
+Concepts 2 to 5 were generated with the first prompt; concept 1 was regenerated after I tightened the prompt.
+
+## How it works
+Prompt builder, then Gemini call (429/503: wait 2s, 4s, 8s, max 3), then 5 checks, then one retry that tells the model exactly which checks failed. Tokens and cost are summed across attempts. API retries and validation retries are counted separately.
+Checks: valid XML; nothing outside the viewBox; title and 3+ text labels; at least one animation; my own check (required science keywords in the labels, plus a safety check that rejects script, foreignObject, event handlers and external links).
+
+## Decisions
+- **Persistence:** browser localStorage, keyed by concept id. Simplest to explain and works on Render's free tier, whose disk is wiped on redeploy. Trade-off: decisions are per browser and not shared. With more time I'd use a database such as Postgres or SQLite on a persistent disk.
+- **Safety:** the API key is only an environment variable, and Gemini is only called from the server. SVGs are shown inside `<img>` data URIs, so scripts cannot run.
+- Generate results are shown in the browser only; they never overwrite `results.json`.
+
+## What failed and how I fixed it
+- Gemini wraps SVG in markdown fences (```xml). Fixed with `extract_svg`.
+- Rate limits: 429/503 happened on <concepts> and the backoff recovered (see API retries).
+- Concept 1 first run FAILED `in_viewbox` even after its retry (<5598> output tokens, $<0.002313>). A fresh run passed.
+- Concept 1 then passed all checks but looked wrong: clipped squares, covered title, overlapping labels. Cause: my viewBox check skips elements with a `transform`, and the model used transforms. Fix: the prompt now bans transforms and reserves a title band. This is why Approve/Reject matters: code cannot judge layout.
+- Known limitations: no text-width or overlap detection; curved paths and transformed elements are not bounds-checked.
+
+## One more day
+- Evaluate simple translate/rotate transforms and add a text-overlap check.
+- Render the SVG to an image and ask a vision model to judge it.
+- Store review decisions in a database, add reviewer login.
+- Save live generations, cache results, add more tests (pipeline with a mocked API).
+
+## AI tools used
+Claude: guided troubleshooting and repetitive code writing.
