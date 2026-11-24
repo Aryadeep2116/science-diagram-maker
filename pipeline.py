@@ -93,5 +93,6 @@ if __name__ == "__main__":
           "| tokens:", result["input_tokens"], "in /", result["output_tokens"], "out",
           "| cost: $", result["cost_usd"], "|", result["latency_seconds"], "s")
     for name, outcome in result["checks"].items():
-        print(("PASS " if outcome["passed"] else "FAIL ") + name + ": " + outcome["reason"])
+        status = "PASS" if outcome["passed"] is True else "FAIL" if outcome["passed"] is False else "UNVERIFIED"
+        print(status + " " + name + ": " + outcome["reason"])
         

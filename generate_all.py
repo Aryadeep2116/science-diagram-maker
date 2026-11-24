@@ -48,14 +48,17 @@ def save_preview(result):
 
 def describe(result):
     """One readable log line for a finished concept."""
-    failed = [name for name, outcome in result["checks"].items() if not outcome["passed"]]
+    failed = [name for name, outcome in result["checks"].items() if outcome["passed"] is False]
     line = (f"  -> {result['final_status'].upper()} | validation retries: {result['validation_retries']} "
             f"| api retries: {result['api_retries']} | tokens: {result['input_tokens']} in / "
             f"{result['output_tokens']} out | est. cost: ${result['cost_usd']} | {result['latency_seconds']}s")
+    line += "\n     checks: " + ", ".join(
+        f"{name}={'PASS' if outcome['passed'] is True else 'FAIL' if outcome['passed'] is False else 'UNVERIFIED'}"
+        for name, outcome in result["checks"].items())
     if failed:
         line += "\n     failed checks: " + ", ".join(failed)
         for name, outcome in result["checks"].items():     # print WHY each check failed
-            if not outcome["passed"]:
+            if outcome["passed"] is False:
                 line += f"\n       {name}: {outcome['reason']}"
     return line
 

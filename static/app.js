@@ -52,7 +52,7 @@ function renderIssues() {
   let pending = 0;
   for (const result of results) {
     const issues = collectIssues(result, CHECKS, generationErrors.get(result.id));
-    if (!result.scientific_verification || result.scientific_verification.status === "unverified") pending++;
+    if (!result.scientific_verification || result.scientific_verification.status === "unverified" || Object.values(result.checks || {}).some(check => check.passed === null)) pending++;
     if (!issues.length) continue;
     affected++;
     const group = document.createElement("div");
@@ -75,7 +75,7 @@ function renderIssues() {
   summary.textContent = !results.length ? "No diagrams available to check." : affected
     ? `${affected} diagram${affected === 1 ? " has" : "s have"} current issues.`
     : "No known issues in the current results.";
-  if (pending) summary.textContent += ` ${pending} diagram${pending === 1 ? " is" : "s are"} awaiting scientific review.`;
+  if (pending) summary.textContent += ` ${pending} diagram${pending === 1 ? " is" : "s are"} awaiting verification.`;
   issuesEl.prepend(summary);
   const stats = document.getElementById("stats");
   const count = status => results.filter(result => result.final_status === status).length;
@@ -92,15 +92,16 @@ function buildRow(r) {
   const card = document.createElement("article");
   card.className = "diagram-card";
   card.dataset.id = r.id;
-  card.id = "diagram-" + r.id;
+
 
   const allChecks = r.checks || {};
   const passedChecks = CHECKS.filter(([key]) => allChecks[key] && allChecks[key].passed).length;
   const checks = CHECKS.map(([key, label]) => {
     const c = allChecks[key] || { passed: false, reason: "No data" };
-    const skipped = !c.passed && String(c.reason || "").startsWith("Skipped");
-    const state = skipped ? "unverified" : c.passed ? "pass" : "fail";
-    const name = skipped ? "SKIPPED" : c.passed ? "PASS" : "FAIL";
+    const skipped = c.passed === false && String(c.reason || "").startsWith("Skipped");
+    const unverified = c.passed === null;
+    const state = skipped || unverified ? "unverified" : c.passed ? "pass" : "fail";
+    const name = skipped ? "SKIPPED" : unverified ? "UNVERIFIED" : c.passed ? "PASS" : "FAIL";
     return `<div class="check-item"><div class="check-top"><span>${esc(label)}</span><span class="status-pill ${state}">${name}</span></div><p class="reason">${esc(c.reason)}</p></div>`;
   }).join("");
 
@@ -136,15 +137,20 @@ function buildRow(r) {
   const approveBtn = card.querySelector(".approve");
   const rejectBtn = card.querySelector(".reject");
   const note = card.querySelector("textarea");
-  approveBtn.onclick = () => setDecision(r, card, "approved");
-  rejectBtn.onclick = () => setDecision(r, card, "rejected");
+  approveBtn.onclick = () => setDecision(r, card.closest("tr"), "approved");
+  rejectBtn.onclick = () => setDecision(r, card.closest("tr"), "rejected");
   note.oninput = () => {
     const current = loadReview(r);
     current.note = note.value;
     saveReview(r, current);
   };
-  card.querySelector(".generate").onclick = (event) => generate(r.id, event.currentTarget, card);
-  return card;
+  card.querySelector(".generate").onclick = (event) => generate(r.id, event.currentTarget, card.closest("tr"));
+  const row = document.createElement("tr");
+  row.id = "diagram-" + r.id;
+  const cell = document.createElement("td");
+  cell.appendChild(card);
+  row.appendChild(cell);
+  return row;
 }
 
 function setDecision(r, tr, decision) {

@@ -15,7 +15,8 @@ class TestVerification(unittest.TestCase):
         self.assertEqual(result['final_status'], 'fail')
         self.assertEqual(result['scientific_verification']['status'], 'fail')
         self.assertIn('gap', result['scientific_verification']['reason'])
-        self.assertTrue(all(c['passed'] for c in result['checks'].values()))
+        self.assertTrue(all(c['passed'] is not False for c in result['checks'].values()))
+        self.assertIsNone(result['checks']['in_viewbox']['passed'])
 
     def test_passed_automatic_checks_need_scientific_review(self):
         result = assess_result({'svg': GOOD_SVG, 'final_status': 'pass'}, PYTHAGORAS)
@@ -25,7 +26,8 @@ class TestVerification(unittest.TestCase):
     def test_review_only_applies_to_exact_svg(self):
         verification = {'status': 'pass', 'reason': 'Reviewed', 'svg_sha256': svg_digest(GOOD_SVG)}
         reviewed = assess_result({'svg': GOOD_SVG, 'scientific_verification': verification}, PYTHAGORAS)
-        self.assertEqual(reviewed['final_status'], 'pass')
+        self.assertEqual(reviewed['final_status'], 'needs_review')  # bounds still need rendering review
+        self.assertEqual(reviewed['scientific_verification']['status'], 'pass')
         changed = assess_result({'svg': GOOD_SVG + ' ', 'scientific_verification': verification}, PYTHAGORAS)
         self.assertEqual(changed['final_status'], 'needs_review')
 
@@ -59,7 +61,7 @@ class TestSavedScientificReviews(unittest.TestCase):
             review = result['scientific_verification']
             self.assertEqual(review['svg_sha256'], svg_digest(result['svg']))
             self.assertTrue(review['reason'])
-            self.assertEqual(result['final_status'], review['status'])
+            self.assertEqual(result['final_status'], 'needs_review' if review['status'] == 'pass' else 'fail')
 
     def test_saved_verdict_is_invalidated_when_svg_changes(self):
         result = next(r for r in load_results() if r['id'] == 2)

@@ -24,8 +24,10 @@ def assess_result(result, concept):
             'reason': 'Scientific accuracy and connectivity have not been verified by the automatic checks.',
         }
     result['scientific_verification'] = verification
-    if any(not check['passed'] for check in result['checks'].values()) or verification['status'] == 'fail':
+    if any(check['passed'] is False for check in result['checks'].values()) or verification['status'] == 'fail':
         result['final_status'] = 'fail'
+    elif any(check['passed'] is None for check in result['checks'].values()):
+        result['final_status'] = 'needs_review'
     elif verification['status'] == 'pass':
         result['final_status'] = 'pass'
     else:

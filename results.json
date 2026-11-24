@@ -10,16 +10,16 @@
         "reason": "SVG parsed correctly."
       },
       "in_viewbox": {
-        "passed": true,
-        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
+        "passed": null,
+        "reason": "Supported static geometry is inside the viewBox, but some content or units, including text, CSS, references or animation, require rendering review before bounds can be verified."
       },
       "title_and_labels": {
         "passed": true,
-        "reason": "Title found and 9 text labels."
+        "reason": "Title found and 9 directly rendered text labels."
       },
       "has_animation": {
         "passed": true,
-        "reason": "Found a <animate> animation."
+        "reason": "Found a timed <animate> animation."
       },
       "custom_checks": {
         "passed": true,
@@ -54,23 +54,23 @@
         "reason": "SVG parsed correctly."
       },
       "in_viewbox": {
-        "passed": true,
-        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
+        "passed": null,
+        "reason": "Supported static geometry is inside the viewBox, but some content or units, including text, CSS, references or animation, require rendering review before bounds can be verified."
       },
       "title_and_labels": {
         "passed": true,
-        "reason": "Title found and 15 text labels."
+        "reason": "Title found and 15 directly rendered text labels."
       },
       "has_animation": {
         "passed": true,
-        "reason": "Found a CSS @keyframes animation."
+        "reason": "Found a timed <animateTransform> animation."
       },
       "custom_checks": {
         "passed": true,
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "pass",
+    "final_status": "needs_review",
     "model": "gemini-3.5-flash-lite",
     "input_tokens": 323,
     "output_tokens": 1773,
@@ -98,16 +98,16 @@
         "reason": "SVG parsed correctly."
       },
       "in_viewbox": {
-        "passed": true,
-        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
+        "passed": null,
+        "reason": "Supported static geometry is inside the viewBox, but some content or units, including text, CSS, references or animation, require rendering review before bounds can be verified."
       },
       "title_and_labels": {
         "passed": true,
-        "reason": "Title found and 8 text labels."
+        "reason": "Title found and 8 directly rendered text labels."
       },
       "has_animation": {
         "passed": true,
-        "reason": "Found a <animateMotion> animation."
+        "reason": "Found a timed <animateMotion> animation."
       },
       "custom_checks": {
         "passed": true,
@@ -141,23 +141,23 @@
         "reason": "SVG parsed correctly."
       },
       "in_viewbox": {
-        "passed": true,
-        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
+        "passed": null,
+        "reason": "Supported static geometry is inside the viewBox, but some content or units, including text, CSS, references or animation, require rendering review before bounds can be verified."
       },
       "title_and_labels": {
         "passed": true,
-        "reason": "Title found and 20 text labels."
+        "reason": "Title found and 11 directly rendered text labels."
       },
       "has_animation": {
         "passed": true,
-        "reason": "Found a CSS @keyframes animation."
+        "reason": "Found a timed <animateMotion> animation."
       },
       "custom_checks": {
         "passed": true,
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "pass",
+    "final_status": "needs_review",
     "model": "gemini-3.5-flash-lite",
     "input_tokens": 302,
     "output_tokens": 4574,
@@ -185,16 +185,16 @@
         "reason": "SVG parsed correctly."
       },
       "in_viewbox": {
-        "passed": true,
-        "reason": "No out-of-bounds geometry found in supported static, untransformed elements; text extent and animation are not checked."
+        "passed": null,
+        "reason": "Supported static geometry is inside the viewBox, but some content or units, including text, CSS, references or animation, require rendering review before bounds can be verified."
       },
       "title_and_labels": {
         "passed": true,
-        "reason": "Title found and 11 text labels."
+        "reason": "Title found and 11 directly rendered text labels."
       },
       "has_animation": {
         "passed": true,
-        "reason": "Found a <animateTransform> animation."
+        "reason": "Found a timed <animateTransform> animation."
       },
       "custom_checks": {
         "passed": true,

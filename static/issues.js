@@ -5,7 +5,7 @@ function collectIssues(result, checks, requestError) {
     const check = (result.checks || {})[key];
     if (!check) {
       issues.push({ category: 'Automatic check', label, reason: 'No check result is available.' });
-    } else if (!check.passed && !String(check.reason || '').startsWith('Skipped')) {
+    } else if (check.passed === false && !String(check.reason || '').startsWith('Skipped')) {
       issues.push({ category: 'Automatic check', label, reason: check.reason || 'No reason was provided.' });
     }
   }
