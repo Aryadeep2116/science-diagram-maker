@@ -9,7 +9,7 @@ import config
 def build_prompt(concept):
     """Make the first-attempt prompt for one concept."""
     # Each line is one clear rule; models follow short explicit rules better.
-    return f"""You are an expert science teacher and SVG artist.
+    prompt = f"""You are an expert science teacher and SVG artist.
 Create ONE animated SVG diagram for UK GCSE students about this concept.
 
 Subject: {concept['subject']}
@@ -28,13 +28,18 @@ STRICT RULES:
    Use SMIL (<animate>, <animateTransform>, <animateMotion>) or CSS @keyframes.
 8. Do NOT use <script>, <foreignObject>, event attributes (onclick etc.) or external links/images.
 9. Keep the design clean and simple with good colour contrast on a light background.
-10. Do NOT use transform attributes. Write every shape with absolute coordinates instead
+10. Do NOT use transform attributes on shapes. Write every shape with absolute coordinates
     (for a tilted square, use a <polygon> with four explicit points).
 11. Keep the title and subtitle in their own band at the top (y between 20 and 70) and
     draw NOTHING else in that band.
 12. Never place two text labels on top of each other; leave at least 20 units between labels,
     and keep the bottom 80 units free for a formula caption only.
 """
+    # Some concepts (only Pythagoras) carry exact coordinates; add them if present.
+    hint = concept.get("layout_hint")
+    if hint:
+        prompt += "\nFIXED LAYOUT (copy these coordinates exactly):\n" + hint + "\n"
+    return prompt
 
 
 def build_retry_prompt(concept, failures):
@@ -43,7 +48,7 @@ def build_retry_prompt(concept, failures):
     failures is a list of (check_name, reason) pairs for the checks that failed.
     We append them so the model knows exactly what to fix.
     """
-    base = build_prompt(concept)              # start with the original instructions
+    base = build_prompt(concept)              # start with the original instructions (and layout hint)
 
     problem_lines = []                        # collect one line per failed check
     for check_name, reason in failures:
