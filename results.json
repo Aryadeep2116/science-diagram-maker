@@ -28,8 +28,8 @@
         "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
       },
       "animated_bounds": {
-        "passed": null,
-        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+        "passed": true,
+        "reason": "All supported moving circles and rotating groups remain inside the viewBox for their complete paths; browser playback and scientific accuracy still need review."
       },
       "title_and_labels": {
         "passed": true,
@@ -44,7 +44,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "needs_review"
+    "final_status": "pass"
   },
   {
     "id": 2,
@@ -75,8 +75,8 @@
         "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
       },
       "animated_bounds": {
-        "passed": null,
-        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+        "passed": true,
+        "reason": "All supported moving circles and rotating groups remain inside the viewBox for their complete paths; browser playback and scientific accuracy still need review."
       },
       "title_and_labels": {
         "passed": true,
@@ -91,7 +91,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "needs_review"
+    "final_status": "pass"
   },
   {
     "id": 3,
@@ -122,8 +122,8 @@
         "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
       },
       "animated_bounds": {
-        "passed": null,
-        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+        "passed": true,
+        "reason": "All supported moving circles and rotating groups remain inside the viewBox for their complete paths; browser playback and scientific accuracy still need review."
       },
       "title_and_labels": {
         "passed": true,
@@ -138,7 +138,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "needs_review"
+    "final_status": "pass"
   },
   {
     "id": 4,
@@ -169,8 +169,8 @@
         "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
       },
       "animated_bounds": {
-        "passed": null,
-        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+        "passed": true,
+        "reason": "All supported moving circles and rotating groups remain inside the viewBox for their complete paths; browser playback and scientific accuracy still need review."
       },
       "title_and_labels": {
         "passed": true,
@@ -185,7 +185,7 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "needs_review"
+    "final_status": "pass"
   },
   {
     "id": 5,
@@ -216,8 +216,8 @@
         "reason": "Padded static rendering found no visible overflow using a bundled fallback font; browser fonts and animation may differ."
       },
       "animated_bounds": {
-        "passed": null,
-        "reason": "Animation movement or visibility needs browser playback review; the renderer checks a static snapshot only."
+        "passed": true,
+        "reason": "All supported moving circles and rotating groups remain inside the viewBox for their complete paths; browser playback and scientific accuracy still need review."
       },
       "title_and_labels": {
         "passed": true,
@@ -232,6 +232,6 @@
         "reason": "Keywords present and SVG is safe."
       }
     },
-    "final_status": "needs_review"
+    "final_status": "pass"
   }
 ]
